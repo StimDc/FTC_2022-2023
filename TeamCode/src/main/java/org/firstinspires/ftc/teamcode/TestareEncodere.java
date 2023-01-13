@@ -39,38 +39,36 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-//SOLVED:the conversion has a 3% error for every 100 cm the robot runs for 103 cm
+//the conversion has a 3% error for every 100 cm the robot runs for 103 cm
 
 
 
-@Autonomous(name="TestareEncodere2022", group="Linear Opmode")
+@Autonomous(name="TestareEncodere", group="Linear Opmode")
 //@Disabled
-public class Autonomiesemiencoder extends LinearOpMode {
+public class TestareEncodere extends LinearOpMode {
 
     // Declare OpMode members.
     private DcMotor front_left=null;
     private DcMotor front_right=null;
     private DcMotor back_left=null;
     private DcMotor back_right=null;
+    private DcMotor slider=null;
     private ElapsedTime runtime = new ElapsedTime();
-    
+
     private static final double TICKS_PER_REV = 537.7d;
     private static final double PI = 3.14159265d;
+    //private static final float GEAR_REDUCTION = 2.0f;
     private static final double  WHEEL_CIRCUMFERENCE =  PI * 3.7795d;
+    // private static final double COUNTS_PER_INCH = (TICKS_PER_REV* GEAR_REDUCTION)/(WHEEL_CIRCUMFERENCE  * PI);
     private static float distanta =0;
     private static float pozitie=0;
     
-    
     private static final double const_lateral_mov = 1.136363636363d;
-    public void debugText(String title, String detail){
-        telemetry.addData(title,detail);
-        telemetry.update();
-    }
-
     @Override
     public void runOpMode() {
 
-        debugText("Status", "initialising");
+        telemetry.addData("Status", "Test");
+        telemetry.update();
 
         //Links the virtual objets to the real motors
         front_left=hardwareMap.get(DcMotor.class, "FL");
@@ -85,7 +83,7 @@ public class Autonomiesemiencoder extends LinearOpMode {
         front_right.setDirection(DcMotor.Direction.FORWARD);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         back_right.setDirection(DcMotor.Direction.FORWARD);
-        
+        //slider.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -93,61 +91,58 @@ public class Autonomiesemiencoder extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            debugText("Status","AUTONOMOUS ON");
             run_using_encoders();
             reset_encoders();
-            left_right(30,0.3, "left");
+
+
+           
+            
+            forward(50, 0.3);
             while(front_left.isBusy()){
 
             }
             Stop();
             
+            reset_encoders();
+            forward(-50, 0.3);
+            while(front_left.isBusy()){
 
-            debugText("Status", "End of autonomous now wait..");
+            }
+            Stop();
+            
+            reset_encoders();
+            lateral(50,0.3,"left");
+            while(front_left.isBusy()){
+
+            }
+            Stop();
+            
+            reset_encoders();
+            lateral(50,0.3,"right");
+            while(front_left.isBusy()){
+
+            }
+            Stop();
+            
+            reset_encoders();
+            rotate(360,0.3,"left");
+            while(front_left.isBusy()){
+
+            }
+            Stop();
+            
+            reset_encoders();
+            rotate(360,0.3,"right");
+            while(front_left.isBusy()){
+
+            }
+            Stop();
+
             sleep(30000); //after execution, the program will wait until the times end so it doesnt loop
         }
 
     }
-    public void forward(double distance,double power){
 
-        
-        front_left.setTargetPosition(calculate_distance(distance));
-        back_left.setTargetPosition(calculate_distance(distance));
-        front_right.setTargetPosition(calculate_distance(distance));
-        back_right.setTargetPosition(calculate_distance(distance));
-
-        run_to_position();
-        set_power(power);
-  
-    }
-
-    //takes distance power and direction as parameters,
-    //if direction is set to "left" the robot will move to left, if set to "right" the robot will move to right
-    public void left_right(double distance, double power, String dir){
-        //const_lateral_mov is a constant used to recalculate distance for doing lateral movements
-        // because when doing so the wheels are still moving forward/backwards 
-        //and there will be a loss of distance ex for 100 cm the robot will move 88 cm 
-        distance = distance * const_lateral_mov;
-        if(dir == "left"){
-            distance  = -distance;
-        }
-
-        else if(dir == "right"){
-            distance  = distance;
-        }
-        
-        front_left.setTargetPosition(calculate_distance(distance));
-        back_left.setTargetPosition(calculate_distance(-distance));
-        front_right.setTargetPosition(calculate_distance(-distance));
-        back_right.setTargetPosition(calculate_distance(distance));
-        
-        run_to_position();
-        
-        
-        
-        set_power(power);
-
-    }
     //sets motors to run with encoders
     public void run_using_encoders(){
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -172,42 +167,91 @@ public class Autonomiesemiencoder extends LinearOpMode {
         front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    
-    //converts physical distance  into ticks so that the robot can understand
-    public int  calculate_distance(double distance){
+    //function to convert the distance in centimeters in inches
 
-        //converts centimeters to inches
-        distance = (double)(distance/2.54);
+    public double cm_to_inch(double cm){
+        return (double)(cm/2.54);
+    }
+
+    ///converts physical distance into ticks so that the robot can understand
+    public int  calculate_distance(double distance){
+        distance = cm_to_inch(distance);
         
         return (int)((distance/WHEEL_CIRCUMFERENCE) * TICKS_PER_REV);
     }
     
 
-    
+    //takes distance power and direction as parameters,
+    //if direction is set to "left" the robot will move to left, if set to "right" the robot will move to right
+
+
+    //dist_loss_const is a constant used for recalculating the distance because when doing the complex moves the robot will lose distance
+    public void lateral(double distance, double power, String dir){
+        
+        
+        distance = distance * const_lateral_mov;
+        if(dir == "left"){
+            distance  = -distance;
+        }
+
+        else if(dir == "right"){
+            distance  = distance;
+        }
+        
+        front_left.setTargetPosition(calculate_distance(distance));
+        back_left.setTargetPosition(calculate_distance(-distance));
+        front_right.setTargetPosition(calculate_distance(-distance));
+        back_right.setTargetPosition(calculate_distance(distance));
+        
+        run_to_position();
+        
+        
+        
+        set_power(power);
+
+    }
     //takes degrees power and direction as parameters
     // the program will convert degrees to distance and the robot will turn left or right
     public void rotate(double degrees, double power, String dir){
-        double deg_to_dis = 1;
+        
+        //constant used for distance, for every 90 degree angle turn, the robot needs 55 cm
+        double  dis_for_right_angle = 55;
 
-        double distance = 0;
-        //set_target_position(distance);
+        double distance = (degrees/90) * dis_for_right_angle;
+        
         run_to_position();
 
         if(dir == "right"){
-            power = power;
+            distance  = distance;
         }
 
         else if(dir == "left"){
-            power = -power;
+            distance = -distance;
         }
-        back_right.setPower(power);
-        back_left.setPower(-power);
-        front_right.setPower(power);
-        back_left.setPower(-power);
+        
+        front_left.setTargetPosition(calculate_distance(distance));
+        front_right.setTargetPosition(calculate_distance(-distance));
+        back_left.setTargetPosition(calculate_distance(distance));
+        back_right.setTargetPosition(calculate_distance(-distance));
+        
+        set_power(power);
     }
 
-    
-    
+    //
+    public void forward(double distance,double power){
+
+        
+        front_left.setTargetPosition(calculate_distance(distance));
+        back_left.setTargetPosition(calculate_distance(distance));
+        front_right.setTargetPosition(calculate_distance(distance));
+        back_right.setTargetPosition(calculate_distance(distance));
+
+        run_to_position();
+        set_power(power);
+
+        
+        
+    }
     
     public void set_power(double power){
         front_left.setPower(power);
@@ -215,7 +259,7 @@ public class Autonomiesemiencoder extends LinearOpMode {
         back_left.setPower(power);
         back_right.setPower(power);
     }
-    ///function
+    
     public void Stop () {
         front_left.setPower(0);
         front_right.setPower(0);
