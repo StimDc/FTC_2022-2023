@@ -43,18 +43,18 @@ import com.qualcomm.robotcore.util.Range;
 
 
 
-@Autonomous(name="TestareEncodere", group="Linear Opmode")
+@Autonomous(name="Autonomie de baza", group="Linear Opmode")
 //@Disabled
-public class TestareEncodere extends LinearOpMode {
+public class AutonomieDeBaza extends LinearOpMode {
 
     // Declare OpMode members.
     private DcMotor front_left=null;
     private DcMotor front_right=null;
     private DcMotor back_left=null;
     private DcMotor back_right=null;
-    private DcMotor slider=null;
     private ElapsedTime runtime = new ElapsedTime();
 
+    
     
     @Override
     public void runOpMode() {
@@ -68,17 +68,9 @@ public class TestareEncodere extends LinearOpMode {
         back_left=hardwareMap.get(DcMotor.class, "BL");
         back_right=hardwareMap.get(DcMotor.class, "BR");
 
-
-
-        //sets motors direction  (depends on how are the physical motors fixated)
-        front_left.setDirection(DcMotor.Direction.REVERSE);
-        front_right.setDirection(DcMotor.Direction.FORWARD);
-        back_left.setDirection(DcMotor.Direction.REVERSE);
-        back_right.setDirection(DcMotor.Direction.FORWARD);
-        //slider.setDirection(DcMotor.Direction.REVERSE);
-
-
+        //Initialises the robot
         StimDC robot = new StimDC(front_left,front_right,back_left,back_right);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -88,37 +80,9 @@ public class TestareEncodere extends LinearOpMode {
             robot.run_using_encoders();
             
             robot.reset_encoders();
-            robot.forward(70,0.3);
+            robot.forward(30,0.3);
             robot.wait_motors();
             robot.stop();
-            
-            robot.reset_encoders();
-            robot.forward(-70,0.3);
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.lateral(50,0.3,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.lateral(50,0.3,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            
-            robot.reset_encoders();
-            robot.rotate(180,0.3,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.rotate(180,0.3,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            
 
             sleep(30000); //after execution, the program will wait until the times end so it doesnt loop
         }
@@ -126,4 +90,8 @@ public class TestareEncodere extends LinearOpMode {
     }
 
 }
+
+
+
+
 

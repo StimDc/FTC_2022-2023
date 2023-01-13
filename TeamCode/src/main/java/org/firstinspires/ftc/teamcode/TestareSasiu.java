@@ -37,7 +37,7 @@ public class TestareSasiu extends OpMode {
         back_right.setDirection(DcMotor.Direction.FORWARD);
         
         
-
+        
     }
 
     //primul gamepad o sa fie pentru miscarea robotului inainte, inapoi, stanga, dreapta si rotire
@@ -76,13 +76,13 @@ public class TestareSasiu extends OpMode {
         } else stop ();
     */
         if ((gamepad1.left_stick_x > -0.1 && gamepad1.left_stick_x < 0.1) && gamepad1.left_stick_y < -0.1){ //fata
-            front_left.setPower(-drivePower);
-            front_right.setPower(-drivePower);
+            front_left.setPower(drivePower);
+            front_right.setPower(drivePower);
             back_left.setPower(drivePower);
             back_right.setPower(drivePower);
         } else if ((gamepad1.left_stick_x > -0.1 && gamepad1.left_stick_x < 0.1) && gamepad1.left_stick_y > 0.1){ //spate
-            front_left.setPower(drivePower);
-            front_right.setPower(drivePower);
+            front_left.setPower(-drivePower);
+            front_right.setPower(-drivePower);
             back_left.setPower(-drivePower);
             back_right.setPower(-drivePower);
         }else stop();
