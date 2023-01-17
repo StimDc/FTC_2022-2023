@@ -52,7 +52,8 @@ public class TestareEncodere extends LinearOpMode {
     private DcMotor front_right=null;
     private DcMotor back_left=null;
     private DcMotor back_right=null;
-    private DcMotor slider=null;
+    //private DcMotor slider=null;
+    private DcMotor rotatory_base = null;
     private ElapsedTime runtime = new ElapsedTime();
 
     
@@ -67,7 +68,8 @@ public class TestareEncodere extends LinearOpMode {
         front_right=hardwareMap.get(DcMotor.class, "FR");
         back_left=hardwareMap.get(DcMotor.class, "BL");
         back_right=hardwareMap.get(DcMotor.class, "BR");
-
+        //slider=hardwareMap.get(DcMotor.class, "SL");
+        rotatory_base = hardwareMap.get(DcMotor.class,"RB");
 
 
         //sets motors direction  (depends on how are the physical motors fixated)
@@ -75,10 +77,10 @@ public class TestareEncodere extends LinearOpMode {
         front_right.setDirection(DcMotor.Direction.FORWARD);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         back_right.setDirection(DcMotor.Direction.FORWARD);
-        //slider.setDirection(DcMotor.Direction.REVERSE);
+        //slider.setDirection(DcMotor.Direction.FORWARD);
+        //rotatory_base.setDirection(DcMotor.Direction.FORWARD);
 
-
-        StimDC robot = new StimDC(front_left,front_right,back_left,back_right);
+        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -86,7 +88,7 @@ public class TestareEncodere extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             robot.run_using_encoders();
-            
+
             robot.reset_encoders();
             robot.forward(70,0.3);
             robot.wait_motors();
@@ -118,12 +120,27 @@ public class TestareEncodere extends LinearOpMode {
             robot.wait_motors();
             robot.stop();
             
+            /*
+            robot.reset_encoders();
+            robot.sliderup(3, 0.1);
+            robot.wait_motors();
+            robot.stop();
             
+            */
 
+            robot.reset_encoders();
+            robot.slider_base_rotate(90,0.3,"left");
+            robot.wait_motors();
+            robot.stop();
+
+            robot.reset_encoders();
+            robot.slider_base_rotate(90,0.3,"right");
+            robot.wait_motors();
+            robot.stop();
+            
             sleep(30000); //after execution, the program will wait until the times end so it doesnt loop
         }
 
     }
 
 }
-

@@ -39,8 +39,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-//the conversion has a 3% error for every 100 cm the robot runs for 103 cm
-
 
 
 @Autonomous(name="Autonomie de baza", group="Linear Opmode")
@@ -52,6 +50,7 @@ public class AutonomieDeBaza extends LinearOpMode {
     private DcMotor front_right=null;
     private DcMotor back_left=null;
     private DcMotor back_right=null;
+    private DcMotor slider=null;
     private ElapsedTime runtime = new ElapsedTime();
 
     
@@ -67,9 +66,10 @@ public class AutonomieDeBaza extends LinearOpMode {
         front_right=hardwareMap.get(DcMotor.class, "FR");
         back_left=hardwareMap.get(DcMotor.class, "BL");
         back_right=hardwareMap.get(DcMotor.class, "BR");
+        //slider=hardwareMap.get(DcMotor.class, "SL");
 
         //Initialises the robot
-        StimDC robot = new StimDC(front_left,front_right,back_left,back_right);
+        StimDC robot = new StimDC(front_left,front_right,back_left,back_right, slider);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -77,14 +77,9 @@ public class AutonomieDeBaza extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            robot.run_using_encoders();
             
-            robot.reset_encoders();
-            robot.forward(30,0.3);
-            robot.wait_motors();
-            robot.stop();
-
-            sleep(30000); //after execution, the program will wait until the times end so it doesnt loop
+            sleep(30000);
+            //after execution, the program will wait until the times end so it doesnt loop
         }
 
     }

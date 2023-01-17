@@ -15,7 +15,9 @@ public class TestareSasiu extends OpMode {
     DcMotor front_right;
     DcMotor back_left;
     DcMotor back_right;
-
+    DcMotor slider;
+    DcMotor rotatory_base;
+    
     double drivePower;
     double sliderPower;
     double rotating_devicePower;
@@ -30,11 +32,14 @@ public class TestareSasiu extends OpMode {
         front_right = hardwareMap.dcMotor.get("FR");
         back_left = hardwareMap.dcMotor.get("BL");
         back_right = hardwareMap.dcMotor.get("BR");
-
+        //slider = hardwareMap.dcMotor.get("SL");
+        rotatory_base = hardwareMap.dcMotor.get("RB");
         front_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         back_right.setDirection(DcMotor.Direction.FORWARD);
+        rotatory_base.setDirection(DcMotor.Direction.FORWARD);
+        //slider.setDirection(DcMotor.Direction.FORWARD);
         
         
         
@@ -115,6 +120,14 @@ public class TestareSasiu extends OpMode {
             back_left.setPower(drivePower);
             back_right.setPower(-drivePower);
         } else stop();
+        if(gamepad1.triangle){
+            //slider.setPower(0.5);
+            rotatory_base.setPower(0.7);
+        }
+        else if(gamepad1.square){
+            //slider.setPower(-0.5);
+            rotatory_base.setPower(-0.7);
+        } else stop();
     }   
 
     @Override
@@ -123,6 +136,9 @@ public class TestareSasiu extends OpMode {
         front_right.setPower(0);
         back_left.setPower(0);
         back_right.setPower(0);
+        //slider.setPower(0);
+        rotatory_base.setPower(0);
+        
     }
         
     }
