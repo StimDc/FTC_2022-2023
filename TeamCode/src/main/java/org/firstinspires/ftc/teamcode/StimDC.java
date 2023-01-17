@@ -18,7 +18,7 @@ public class StimDC {
     private DcMotor back_left = null;
     private DcMotor back_right = null;
     //private DcMotor slider = null;
-    public DcMotor rotatory_base = null;
+    private DcMotor rotatory_base = null;
 
 
     StimDC(DcMotor front_left, DcMotor front_right, DcMotor back_left, DcMotor back_right,DcMotor rotatory_base) {
@@ -111,7 +111,7 @@ public class StimDC {
     //rotates the rotatory base for the slider
     public void slider_base_rotate(double degrees,double power,String dir){
         double dis_for_right_angle = 3.75;
-        
+
         this.rotatory_base.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         if(dir == "right"){
             degrees = degrees;

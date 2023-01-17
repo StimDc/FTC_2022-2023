@@ -39,23 +39,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-//the conversion has a 3% error for every 100 cm the robot runs for 103 cm
 
 
-
-@Autonomous(name="TestareEncodere", group="Linear Opmode")
+@Autonomous(name="Dreapta cu camera", group="Linear Opmode")
 //@Disabled
-public class TestareEncodere extends LinearOpMode {
+public class DreaptaCuCamera extends LinearOpMode {
 
     // Declare OpMode members.
     private DcMotor front_left=null;
     private DcMotor front_right=null;
     private DcMotor back_left=null;
     private DcMotor back_right=null;
-    //private DcMotor slider=null;
-    private DcMotor rotatory_base = null;
+    private DcMotor rotatory_base=null;
     private ElapsedTime runtime = new ElapsedTime();
 
+    private String direction = "right";
     
     @Override
     public void runOpMode() {
@@ -68,19 +66,11 @@ public class TestareEncodere extends LinearOpMode {
         front_right=hardwareMap.get(DcMotor.class, "FR");
         back_left=hardwareMap.get(DcMotor.class, "BL");
         back_right=hardwareMap.get(DcMotor.class, "BR");
-        //slider=hardwareMap.get(DcMotor.class, "SL");
-        rotatory_base = hardwareMap.get(DcMotor.class,"RB");
+        rotatory_base = hardwareMap.get(DcMotor.class, "RB");
 
+        //Initialises the robot
+        StimDC robot = new StimDC(front_left,front_right,back_left,back_right, rotatory_base);
 
-        //sets motors direction  (depends on how are the physical motors fixated)
-        front_left.setDirection(DcMotor.Direction.REVERSE);
-        front_right.setDirection(DcMotor.Direction.FORWARD);
-        back_left.setDirection(DcMotor.Direction.REVERSE);
-        back_right.setDirection(DcMotor.Direction.FORWARD);
-        //slider.setDirection(DcMotor.Direction.FORWARD);
-        //rotatory_base.setDirection(DcMotor.Direction.FORWARD);
-
-        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -90,61 +80,67 @@ public class TestareEncodere extends LinearOpMode {
             robot.run_using_encoders();
             
             robot.reset_encoders();
-            robot.forward(70,0.3);
+            robot.forward(130,0.5);
             robot.wait_motors();
             robot.stop();
             
             robot.reset_encoders();
-            robot.forward(-70,0.3);
+            robot.lateral(30,0.5,"right");
             robot.wait_motors();
             robot.stop();
             
-            robot.reset_encoders();
-            robot.lateral(50,0.3,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.lateral(100,0.3,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.lateral(50,0.3,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.rotate(180,0.3,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.rotate(180,0.3,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            /*
-            robot.reset_encoders();
-            robot.sliderup(3, 0.1);
-            robot.wait_motors();
-            robot.stop();
-            
-            */
             robot.run_using_encoders();
             robot.reset_encoders();
-            robot.slider_base_rotate(180,0.3,"right");
+            robot.slider_base_rotate(65,0.6,"left");
             robot.wait_motors();
             robot.stop();
-            sleep(100);
+            sleep(1000);
+            for(int i = 1;i<=5;i++){
+               robot.reset_encoders();
+                robot.slider_base_rotate(170,0.6,"right");
+                robot.wait_motors();
+                robot.stop();
+                sleep(1000); 
+                
+                robot.reset_encoders();
+                robot.slider_base_rotate(170,0.6,"left");
+                robot.wait_motors();
+                robot.stop();
+                sleep(1000);
+            }
+            
+            robot.run_using_encoders();
             robot.reset_encoders();
-            robot.slider_base_rotate(180,0.3,"left");
+            robot.lateral(30,0.5,"left");
             robot.wait_motors();
             robot.stop();
             
-            sleep(30000); //after execution, the program will wait until the times end so it doesnt loop
+            robot.reset_encoders();
+            robot.forward(-61,0.5);
+            robot.wait_motors();
+            robot.stop();
+            if(direction != "straight"){
+                parking(robot,direction);
+            }
+            
+            
+            sleep(30000);
+            //after execution, the program will wait until the times end so it doesnt loop
         }
+        
 
     }
+    public void parking(StimDC robot,String dir){
+            robot.reset_encoders();
+            robot.lateral(60,0.5,dir);
+            robot.wait_motors();
+            robot.stop();
+            
+        }
 
 }
+
+
+
+
+

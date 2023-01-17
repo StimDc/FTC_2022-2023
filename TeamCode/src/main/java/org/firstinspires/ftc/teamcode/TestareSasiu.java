@@ -120,6 +120,7 @@ public class TestareSasiu extends OpMode {
             back_left.setPower(drivePower);
             back_right.setPower(-drivePower);
         } else stop();
+        
         if(gamepad1.triangle){
             //slider.setPower(0.5);
             rotatory_base.setPower(0.7);
