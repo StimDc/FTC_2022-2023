@@ -1,6 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
+
 
 
 //Class to handle robot movements to reuse in other files
@@ -19,7 +28,10 @@ public class StimDC {
     private DcMotor back_right = null;
     //private DcMotor slider = null;
     private DcMotor rotatory_base = null;
-
+    public double camera_fx = 578.272;
+    public double camera_fy = 578.272;
+    public double camera_cx = 402.145;
+    public double camera_cy = 221.506;
 
     StimDC(DcMotor front_left, DcMotor front_right, DcMotor back_left, DcMotor back_right,DcMotor rotatory_base) {
         this.front_left = front_left;
@@ -200,5 +212,16 @@ public class StimDC {
 
         }
     }
-
+    /*
+    public void tagToTelemetry(AprilTagDetection detection){
+        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+        telemetry.addLine(String.format("Translation X: %.2f meters", detection.pose.x));
+        telemetry.addLine(String.format("Translation Y: %.2f meters", detection.pose.y));
+        telemetry.addLine(String.format("Translation Z: %.2f meters", detection.pose.z));
+        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+    }
+    
+    */
 }
