@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+
+
+
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+import com.qualcomm.robotcore.hardware.Servo;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.openftc.apriltag.AprilTagDetection;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
+
 
 
 
@@ -19,45 +20,89 @@ public class StimDC {
 
     private static final double  WHEEL_CIRCUMFERENCE =  PI * 3.7795d;
     private static final double CONST_LATERAL_MOVEMENT = 1.136363636363d;
-    private static final double SLIDER_WHEEL = 0.440944882d;
-    private static final double ROTATORY_BASE = 5.90551181d;
+    private static final double SLIDER_WHEEL =PI * 0.440944882d;
+    private static final double ROTATORY_BASE = PI *5.90551181d;
     private static final double REV_TICKS_PER_REV = 288d;
-    private DcMotor front_left = null;
-    private DcMotor front_right = null;
-    private DcMotor back_left = null;
-    private DcMotor back_right = null;
-    //private DcMotor slider = null;
-    private DcMotor rotatory_base = null;
+    private DcMotor front_left;
+    private DcMotor front_right;
+    private DcMotor back_left;
+    private DcMotor back_right;
+    private DcMotor slider ;
+    private DcMotor rotatory_base;
+    private DcMotor arm;
+    private Servo c1 ;
+    private Servo c2;
     public double camera_fx = 578.272;
     public double camera_fy = 578.272;
     public double camera_cx = 402.145;
     public double camera_cy = 221.506;
 
-    StimDC(DcMotor front_left, DcMotor front_right, DcMotor back_left, DcMotor back_right,DcMotor rotatory_base) {
-        this.front_left = front_left;
-        this.front_right = front_right;
-        this.back_left = back_left;
-        this.back_right = back_right;
-        //this.slider = slider;
-        this.rotatory_base = rotatory_base;
+
+
+    StimDC(DcMotor front_left, DcMotor front_right, DcMotor back_left, DcMotor back_right,DcMotor rotatory_base, DcMotor slider,DcMotor arm,Servo c1, Servo c2) {
 
         front_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         back_right.setDirection(DcMotor.Direction.FORWARD);
-        //slider.setDirection(DcMotor.Direction.FORWARD);
+        slider.setDirection(DcMotor.Direction.FORWARD);
         rotatory_base.setDirection(DcMotor.Direction.REVERSE);
+        arm.setDirection(DcMotor.Direction.FORWARD);
+
+        this.front_left = front_left;
+        this.front_right = front_right;
+        this.back_left = back_left;
+        this.back_right = back_right;
+        this.slider = slider;
+        this.rotatory_base = rotatory_base;
+        this.arm = arm;
+        this.c1 = c1;
+        this.c2 = c2;
+
+
 
     }
 
+    StimDC(){
+
+    }
+
+    public void init_wheel_motors(DcMotor front_left, DcMotor front_right, DcMotor back_left, DcMotor back_right){
+        front_left.setDirection(DcMotor.Direction.REVERSE);
+        front_right.setDirection(DcMotor.Direction.FORWARD);
+        back_left.setDirection(DcMotor.Direction.REVERSE);
+        back_right.setDirection(DcMotor.Direction.FORWARD);
+
+        this.front_left = front_left;
+        this.front_right = front_right;
+        this.back_left = back_left;
+        this.back_right = back_right;
+    }
+
+    public void init_slider(DcMotor slider, Servo c1, Servo c2){
+        slider.setDirection(DcMotor.Direction.FORWARD);
+
+        this.slider = slider;
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
     //sets motors to run with encoders
-    public void run_using_encoders(){
+    public void run_using_encoders_wheel_motors(){
         this.front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //this.slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void run_using_encoders_slider(){
+        this.slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    public void run_using_encoders(){
+        run_using_encoders_wheel_motors();
+        run_using_encoders_slider();
         this.rotatory_base.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -71,18 +116,27 @@ public class StimDC {
 
 
     //resets encoders for setting new distance
-    public void reset_encoders(){
-        this.back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    public void reset_encoders_wheel_motors(){
         this.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //this.slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.rotatory_base.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void reset_encoders_slider(){
+        this.slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    public void reset_encoders(){
+        reset_encoders_wheel_motors();
+        reset_encoders_slider();
+        //this.rotatory_base.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //this.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
     //function to convert the distance in centimeters in inches
     public double cm_to_inch(double cm){
-        return (double)(cm/2.54);
+        return (cm/2.54);
     }
     ///converts physical distance into ticks so that the robot can understand
     public int  calculate_distance(double distance,double wheel_diameter, double ticks){
@@ -99,12 +153,12 @@ public class StimDC {
 
 
         distance = distance * CONST_LATERAL_MOVEMENT;
-        if(dir == "left"){
+        if(dir.equals("left")){
             distance  = -distance;
         }
 
-        else if(dir == "right"){
-            distance  = distance;
+        else if(dir.equals("right")){
+            distance = distance;
         }
 
         this.front_left.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
@@ -125,11 +179,11 @@ public class StimDC {
         double dis_for_right_angle = 3.75;
 
         this.rotatory_base.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if(dir == "right"){
+        if(dir.equals("right")){
             degrees = degrees;
 
         }
-        else if (dir == "left"){
+        else if (dir.equals("left")){
 
             degrees = -degrees;
 
@@ -150,11 +204,11 @@ public class StimDC {
 
         run_to_position();
 
-        if(dir == "right"){
+        if(dir.equals("right")){
             distance  = distance;
         }
 
-        else if(dir == "left"){
+        else if(dir.equals("left")){
             distance = -distance;
         }
 
@@ -180,15 +234,52 @@ public class StimDC {
 
 
     }
-    /*
+
+    public void grab_cone(){
+        this.c1.setPosition(0.4);
+        this.c2.setPosition(0);
+    }
+    public void release_cone(){
+        this.c1.setPosition(0);
+        this.c2.setPosition(0.4);
+    }
+
     public void sliderup(double distance, double power){
-        this.slider.setTargetPosition(calculate_slider(distance));
+        //distance = distance;
+        this.slider.setTargetPosition(calculate_distance(distance,SLIDER_WHEEL,GO_TICKS_PER_REV));
         this.slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.slider.setPower(power);
 
     }
-    */
 
+    public void sliderdown (double distance, double power){
+        distance = -distance;
+        this.slider.setTargetPosition(calculate_distance(distance,SLIDER_WHEEL,GO_TICKS_PER_REV));
+        this.slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.slider.setPower(power);
+    }
+
+
+    public void armextend(double distance, double power){
+        this.arm.setTargetPosition(calculate_distance(distance,0,GO_TICKS_PER_REV));
+        this.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.arm.setPower(power);
+    }
+    public void armretract(double distance ,double power){
+        distance = -distance;
+        this.arm.setTargetPosition(calculate_distance(distance,0,GO_TICKS_PER_REV));
+        this.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.arm.setPower(power);
+    }
+    public void grab_claw(){
+        this.c1.setPosition(0.4);
+        this.c2.setPosition(0);
+    }
+
+    public void release_claw(){
+        this.c1.setPosition(0);
+        this.c2.setPosition(0.4);
+    }
     public void set_power(double power){
         this.front_left.setPower(power);
         this.front_right.setPower(power);
@@ -197,31 +288,42 @@ public class StimDC {
 
 
     }
-
-    public void stop () {
-        this.front_left.setPower(0);
+    public void stop_wheel_motors(){
         this.front_right.setPower(0);
-        this.back_left.setPower(0);
+        this.front_left.setPower(0);
         this.back_right.setPower(0);
-        //this.slider.setPower(0);
-        this.rotatory_base.setPower(0);
-    }
+        this.back_left.setPower(0);
 
-    public void wait_motors(){
-        while((this.front_left.isBusy() && this.front_right.isBusy() && this.back_left.isBusy() && this.back_right.isBusy() ) || this.rotatory_base.isBusy()){
+    }
+    public void stop_slider(){
+        this.slider.setPower(0);
+    }
+    public void stop () {
+        stop_wheel_motors();
+        stop_slider();
+        this.rotatory_base.setPower(0);
+        this.arm.setPower(0);
+    }
+    public void wait_wheel_motors(){
+        telemetry.addLine("waiting wheel motors");
+        telemetry.update();
+        while(this.front_left.isBusy() && this.front_right.isBusy() && this.back_left.isBusy() && this.back_right.isBusy()){
 
         }
     }
-    /*
-    public void tagToTelemetry(AprilTagDetection detection){
-        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-        telemetry.addLine(String.format("Translation X: %.2f meters", detection.pose.x));
-        telemetry.addLine(String.format("Translation Y: %.2f meters", detection.pose.y));
-        telemetry.addLine(String.format("Translation Z: %.2f meters", detection.pose.z));
-        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+    public void wait_slider(){
+        telemetry.addLine("waiting slider motor");
+        telemetry.update();
+        while(this.slider.isBusy()){
+
+        }
     }
-    
-    */
+    public void wait_motors(){
+        telemetry.addLine("waiting ALL motors");
+        telemetry.update();
+        while((this.front_left.isBusy() && this.front_right.isBusy() && this.back_left.isBusy() && this.back_right.isBusy() ) || this.rotatory_base.isBusy() || this.slider.isBusy()){
+
+        }
+    }
+
 }
