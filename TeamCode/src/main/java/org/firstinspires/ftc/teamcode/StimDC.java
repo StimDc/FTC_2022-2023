@@ -1,17 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-
-
-
-
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.robotcore.hardware.Servo;
-
+//import org.firstinspires.ftc.teamcode.Stim;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-
-
 
 //Class to handle robot movements to reuse in other files
 public class StimDC {
@@ -62,11 +55,13 @@ public class StimDC {
 
 
     }
+    /*
+   StimDC(){
+        init_slider(c1, c2);
+       init_wheel_motor(front_left, front_right, back_left, back_right);
+   }
 
-    StimDC(){
-
-    }
-
+    
     public void init_wheel_motors(DcMotor front_left, DcMotor front_right, DcMotor back_left, DcMotor back_right){
         front_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
@@ -86,7 +81,7 @@ public class StimDC {
         this.c1 = c1;
         this.c2 = c2;
     }
-
+    */
     //sets motors to run with encoders
     public void run_using_encoders_wheel_motors(){
         this.front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -222,7 +217,7 @@ public class StimDC {
 
     public void forward(double distance,double power){
 
-
+        distance = distance * 0.934579439252d;
         this.front_left.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
         this.back_left.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
         this.front_right.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
@@ -305,22 +300,22 @@ public class StimDC {
         this.arm.setPower(0);
     }
     public void wait_wheel_motors(){
-        telemetry.addLine("waiting wheel motors");
-        telemetry.update();
+        //telemetry.addLine("waiting wheel motors");
+        //telemetry.update();
         while(this.front_left.isBusy() && this.front_right.isBusy() && this.back_left.isBusy() && this.back_right.isBusy()){
 
         }
     }
     public void wait_slider(){
-        telemetry.addLine("waiting slider motor");
-        telemetry.update();
+        //telemetry.addLine("waiting slider motor");
+        //telemetry.update();
         while(this.slider.isBusy()){
 
         }
     }
     public void wait_motors(){
-        telemetry.addLine("waiting ALL motors");
-        telemetry.update();
+        //telemetry.addLine("waiting ALL motors");
+        //telemetry.update();
         while((this.front_left.isBusy() && this.front_right.isBusy() && this.back_left.isBusy() && this.back_right.isBusy() ) || this.rotatory_base.isBusy() || this.slider.isBusy()){
 
         }

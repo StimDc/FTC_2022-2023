@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -52,8 +53,10 @@ public class TestareEncodere extends LinearOpMode {
     private DcMotor front_right=null;
     private DcMotor back_left=null;
     private DcMotor back_right=null;
-    //private DcMotor slider=null;
+    private DcMotor slider=null;
     private DcMotor rotatory_base = null;
+    private DcMotor arm  = null;
+    private Servo c1 ,c2 = null;
     private ElapsedTime runtime = new ElapsedTime();
 
     
@@ -68,8 +71,13 @@ public class TestareEncodere extends LinearOpMode {
         front_right=hardwareMap.get(DcMotor.class, "FR");
         back_left=hardwareMap.get(DcMotor.class, "BL");
         back_right=hardwareMap.get(DcMotor.class, "BR");
-        //slider=hardwareMap.get(DcMotor.class, "SL");
+        slider=hardwareMap.get(DcMotor.class, "SL");
+        arm = hardwareMap.get(DcMotor.class, "AR");
+        c1 = hardwareMap.get(Servo.class, "C1");
+        c2 = hardwareMap.get(Servo.class,"C2");
+        
         rotatory_base = hardwareMap.get(DcMotor.class,"RB");
+        
 
 
         //sets motors direction  (depends on how are the physical motors fixated)
@@ -77,10 +85,11 @@ public class TestareEncodere extends LinearOpMode {
         front_right.setDirection(DcMotor.Direction.FORWARD);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         back_right.setDirection(DcMotor.Direction.FORWARD);
-        //slider.setDirection(DcMotor.Direction.FORWARD);
+        slider.setDirection(DcMotor.Direction.REVERSE);
+        arm.setDirection(DcMotor.Direction.FORWARD);
         //rotatory_base.setDirection(DcMotor.Direction.FORWARD);
 
-        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base);
+        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base,slider,arm,c1,c2);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -88,7 +97,7 @@ public class TestareEncodere extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             robot.run_using_encoders();
-            
+            /*
             robot.reset_encoders();
             robot.forward(70,0.3);
             robot.wait_motors();
@@ -130,7 +139,7 @@ public class TestareEncodere extends LinearOpMode {
             robot.wait_motors();
             robot.stop();
             
-            */
+            
             robot.run_using_encoders();
             robot.reset_encoders();
             robot.slider_base_rotate(180,0.3,"right");
@@ -141,6 +150,19 @@ public class TestareEncodere extends LinearOpMode {
             robot.slider_base_rotate(180,0.3,"left");
             robot.wait_motors();
             robot.stop();
+            */
+            robot.reset_encoders();
+            robot.sliderup(10,0.1);
+            robot.wait_motors();
+            robot.stop();
+            
+            sleep(1000);
+            robot.reset_encoders();
+            robot.sliderdown(2,0.1);
+            robot.wait_motors();
+            robot.stop();
+        
+            
             
             sleep(30000); //after execution, the program will wait until the times end so it doesnt loop
         }

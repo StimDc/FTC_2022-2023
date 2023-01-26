@@ -22,6 +22,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -59,8 +60,11 @@ public class DreaptaMediuCuCamera extends LinearOpMode
     private DcMotor front_right=null;
     private DcMotor back_left=null;
     private DcMotor back_right=null;
-    //private DcMotor slider=null;
+    private DcMotor slider=null;
     private DcMotor rotatory_base = null;
+    private DcMotor arm = null;
+    private Servo c1 = null;
+    private Servo c2 = null;
     @Override
     public void runOpMode()
     {
@@ -68,9 +72,13 @@ public class DreaptaMediuCuCamera extends LinearOpMode
         front_right=hardwareMap.get(DcMotor.class, "FR");
         back_left=hardwareMap.get(DcMotor.class, "BL");
         back_right=hardwareMap.get(DcMotor.class, "BR");
-        //slider=hardwareMap.get(DcMotor.class, "SL");
+        slider=hardwareMap.get(DcMotor.class, "SL");
         rotatory_base = hardwareMap.get(DcMotor.class,"RB");
-        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base);
+        arm = hardwareMap.get(DcMotor.class, "AR");
+        c1 = hardwareMap.get(Servo.class, "C1");
+        c2 = hardwareMap.get(Servo.class, "C2");
+        
+        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base,slider,arm,c1,c2);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -167,115 +175,49 @@ public class DreaptaMediuCuCamera extends LinearOpMode
     }
     public void autonomie(StimDC robot){
         robot.run_using_encoders();
-            
-            robot.reset_encoders();
-            robot.forward(145,0.5);
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.forward(-15,0.5);
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.rotate(180,0.5,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            sleep(500);
-            robot.reset_encoders();
-            robot.lateral(24,0.5,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            sleep(500);
-            
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.slider_base_rotate(65,0.9,"right");
-            robot.wait_motors();
-            robot.stop();
-            sleep(1000);
-            
-            for(int i = 1;i<=5;i++){
-               robot.reset_encoders();
-                robot.slider_base_rotate(145,0.9,"left");
-                robot.wait_motors();
-                robot.stop();
-                sleep(1000); 
-                
-                robot.reset_encoders();
-                robot.slider_base_rotate(145,0.9,"right");
-                robot.wait_motors();
-                robot.stop();
-                sleep(1000);
-            }
-            
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.lateral(24,0.5,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.forward(60,0.6);
-            robot.wait_motors();
-            robot.stop();
-            
-            if(direction !="straight"){
-                parking(robot,direction);
-            }
-            /*
-            robot.reset_encoders();
-            robot.lateral(30,0.5,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.slider_base_rotate(65,0.9,"left");
-            robot.wait_motors();
-            robot.stop();
-            sleep(1000);
-            for(int i = 1;i<=5;i++){
-               robot.reset_encoders();
-                robot.slider_base_rotate(170,0.9,"right");
-                robot.wait_motors();
-                robot.stop();
-                sleep(1000); 
-                
-                robot.reset_encoders();
-                robot.slider_base_rotate(170,0.9,"left");
-                robot.wait_motors();
-                robot.stop();
-                sleep(1000);
-            }
-            
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.lateral(30,0.5,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.forward(-125,0.5);
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.lateral(80,0.5,"left");
-            robot.wait_motors();
-            robot.stop();
-            */
-            sleep(30000);
+        robot.reset_encoders();
+
+        robot.forward(70,0.5);
+        robot.wait_wheel_motors();
+        robot.stop_wheel_motors();
+
+        robot.reset_encoders_wheel_motors();
+
+        robot.lateral(29,0.5,"left");
+        robot.wait_wheel_motors();
+        robot.stop_wheel_motors();
+
+        sleep(2000);
+
+        robot.reset_encoders_wheel_motors();
+        robot.lateral(85,0.5,"right");
+        robot.wait_wheel_motors();
+        robot.stop_wheel_motors();
+
+        robot.reset_encoders_wheel_motors();
+        robot.forward(30,0.5);
+        robot.wait_wheel_motors();
+        robot.stop_wheel_motors();
+
+        sleep(3000);
+
+        robot.reset_encoders_wheel_motors();
+        robot.forward(-30,0.5);
+        robot.wait_wheel_motors();
+        robot.stop_wheel_motors();
+
+        robot.reset_encoders_wheel_motors();
+        robot.lateral(85,0.5,"left");
+        robot.wait_wheel_motors();
+        robot.stop_wheel_motors();
+        
+
             
     }
     
      public void parking(StimDC robot,String dir){
             robot.reset_encoders();
-            robot.lateral(-60,0.5,dir);
+            robot.lateral(60,0.5,dir);
             robot.wait_motors();
             robot.stop();
             

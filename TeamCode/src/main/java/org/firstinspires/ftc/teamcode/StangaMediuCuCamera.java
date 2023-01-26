@@ -1,207 +1,201 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
+/*
+ * Copyright (c) 2021 OpenFTC Team
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
 
+import java.util.ArrayList;
 
+@Autonomous(name="Stanga mediu cu camera", group="Linear Opmode")
+public class StangaMediuCuCamera extends LinearOpMode
+{
+    OpenCvCamera camera;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-@Autonomous(name="Dreapta mediu cu camera", group="Linear Opmode")
-//@Disabled
-public class StangaMediuCuCamera extends LinearOpMode {
+    // Lens intrinsics
+    // UNITS ARE PIXELS
+    // NOTE: this calibration is for the C920 webcam at 800x448.
+    // You will need to do your own calibration for other configurations!
+    
 
-    // Declare OpMode members.
+    // UNITS ARE METERS
+    double tagsize = 0.166;
+    
+     // Tag ID 18 from the 36h11 family
+    int[] TAGS = {17,18,19};
+    String id;
+    AprilTagDetection tagOfInterest = null;
+    String direction;
     private DcMotor front_left=null;
     private DcMotor front_right=null;
     private DcMotor back_left=null;
     private DcMotor back_right=null;
-    private DcMotor rotatory_base=null;
-    private ElapsedTime runtime = new ElapsedTime();
-    private String direction = "left";
+    private DcMotor slider=null;
+    private DcMotor rotatory_base = null;
+    private DcMotor arm = null;
     
-    
+    private Servo c1 = null;
+    private Servo c2= null;
     @Override
-    public void runOpMode() {
-
-        telemetry.addData("Status", "Test");
-        telemetry.update();
-
-        //Links the virtual objets to the real motors
+    public void runOpMode()
+    {
         front_left=hardwareMap.get(DcMotor.class, "FL");
         front_right=hardwareMap.get(DcMotor.class, "FR");
         back_left=hardwareMap.get(DcMotor.class, "BL");
         back_right=hardwareMap.get(DcMotor.class, "BR");
-        rotatory_base = hardwareMap.get(DcMotor.class, "RB");
+        slider=hardwareMap.get(DcMotor.class, "SL");
+        rotatory_base = hardwareMap.get(DcMotor.class,"RB");
+        arm = hardwareMap.get(DcMotor.class, "AR");
+        c1 = hardwareMap.get(Servo.class, "C1");
+        c2 = hardwareMap.get(Servo.class , "C2");
+        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base,slider,arm,c1,c2);
 
-        //Initialises the robot
-        StimDC robot = new StimDC(front_left,front_right,back_left,back_right, rotatory_base);
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, robot.camera_fx, robot.camera_fy, robot.camera_cx, robot.camera_cy);
 
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        runtime.reset();
+        camera.setPipeline(aprilTagDetectionPipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
+            @Override
+            public void onOpened(){
+                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+            }
 
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.forward(140,0.6);
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.forward(-15,0.6);
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.rotate(180,0.5,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            sleep(500);
-            
-            robot.reset_encoders();
-            robot.lateral(30,0.5,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            sleep(500);
-            
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.slider_base_rotate(65,0.6,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            sleep(1000);
-            
-            for(int i = 1;i<=5;i++){
-                robot.reset_encoders();
-                robot.slider_base_rotate(170,0.6,"right");
-                robot.wait_motors();
-                robot.stop();
-                
-                sleep(1000);
-                
-                robot.reset_encoders();
-                robot.slider_base_rotate(170,0.6,"left");
-                robot.wait_motors();
-                robot.stop();
-                
-                sleep(1000);
+            @Override
+            public void onError(int errorCode){
                 
             }
             
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.lateral(30,0.5,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.forward(60,0.6);
-            robot.wait_motors();
-            robot.stop();
-            
-        
-            if(direction !="straight"){
-                parking(robot,direction);
+        });
+
+        telemetry.setMsTransmissionInterval(50);
+
+        /*
+         * The INIT-loop:
+         * This REPLACES waitForStart!
+         */
+        while (!isStarted() && !isStopRequested())
+        {
+            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+
+            if(currentDetections.size() != 0)
+            {
+                boolean tagFound = false;
+
+                for(AprilTagDetection tag : currentDetections)
+                {
+                    for(int i = 0;i<3;i++){
+                        if( tag.id == TAGS[i]){
+                            if(tag.id == 17){
+                                direction = "left";
+                            }
+                            else if(tag.id == 18){
+                                direction = "straight";
+                            }
+                            else{
+                                direction = "right";
+                            }
+                            
+                            tagOfInterest = tag;
+                            tagFound = true;
+                            break;
+                        }
+                    }
+                    
+                }
+
+                if(tagFound == true)
+                {
+                    telemetry.addLine("Image was found ");
+                   
+                }
+                else
+                {
+                    telemetry.addLine("NO IMAGE WAS FOUND YOU MAY CHANGE AUTONOMOUS");
+
+                    if(tagOfInterest == null)
+                    {
+                        telemetry.addLine("REALLY CHANGE THE AUTONOMOUS");
+                    }
+                    else
+                    {
+                        //robot.telemetry.addLine("its good lmao");
+                        //robot.tagToTelemetry(tagOfInterest);
+                    }
+                }
+
             }
-            /*
-            robot.reset_encoders();
-            robot.lateral(30,0.5,"right");
-            robot.wait_motors();
-            robot.stop();
             
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.slider_base_rotate(65,0.9,"left");
-            robot.wait_motors();
-            robot.stop();
-            sleep(1000);
-            for(int i = 1;i<=5;i++){
-               robot.reset_encoders();
-                robot.slider_base_rotate(170,0.9,"right");
-                robot.wait_motors();
-                robot.stop();
-                sleep(1000); 
-                
-                robot.reset_encoders();
-                robot.slider_base_rotate(170,0.9,"left");
-                robot.wait_motors();
-                robot.stop();
-                sleep(1000);
-            }
-            
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.lateral(30,0.5,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.forward(-125,0.5);
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.lateral(80,0.5,"left");
-            robot.wait_motors();
-            robot.stop();
-            */
-            sleep(30000);
-            //after execution, the program will wait until the times end so it doesnt loop
+
+            telemetry.update();
+            sleep(20);
         }
+
+        /*
+         * The START command just came in: now work off the latest snapshot acquired
+         * during the init loop.
+         */
+
+        /* Update the telemetry */
+            autonomie(robot);
+            sleep(30000);
+
+
+       
+    }
+    public void autonomie(StimDC robot){
+        robot.run_using_encoders();
+
+        robot.reset_encoders();
+        robot.forward(60,0.5);
+        robot.wait_motors();
+        robot.stop();
+
+        if(direction != "staight"){
+            parking(robot, direction);
+        }
+
+        
 
     }
     
-    public void parking(StimDC robot,String dir){
+     public void parking(StimDC robot,String dir){
             robot.reset_encoders();
-            robot.lateral(-60,0.5,dir);
+            robot.lateral(60,0.5,dir);
             robot.wait_motors();
             robot.stop();
             
         }
 
+   
 }
-
-
-
-
-

@@ -22,6 +22,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -59,8 +60,11 @@ public class DreaptaMareCuCamera extends LinearOpMode
     private DcMotor front_right=null;
     private DcMotor back_left=null;
     private DcMotor back_right=null;
-    //private DcMotor slider=null;
+    private DcMotor slider=null;
     private DcMotor rotatory_base = null;
+    private DcMotor arm = null;
+    private Servo c1 = null;
+    private Servo c2 = null;
     @Override
     public void runOpMode()
     {
@@ -68,10 +72,13 @@ public class DreaptaMareCuCamera extends LinearOpMode
         front_right=hardwareMap.get(DcMotor.class, "FR");
         back_left=hardwareMap.get(DcMotor.class, "BL");
         back_right=hardwareMap.get(DcMotor.class, "BR");
-        //slider=hardwareMap.get(DcMotor.class, "SL");
+        slider=hardwareMap.get(DcMotor.class, "SL");
         rotatory_base = hardwareMap.get(DcMotor.class,"RB");
-        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base);
-
+        arm = hardwareMap.get(DcMotor.class, "AR");
+        c1 = hardwareMap.get(Servo.class, "C1");
+        c2 = hardwareMap.get(Servo.class, "C2");
+        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base,slider,arm,c1,c2);
+        //robot.hardware(hardwareMap);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, robot.camera_fx, robot.camera_fy, robot.camera_cx, robot.camera_cy);
