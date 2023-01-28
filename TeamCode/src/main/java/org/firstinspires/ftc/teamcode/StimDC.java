@@ -30,6 +30,9 @@ public class StimDC {
     public double camera_cx = 402.145;
     public double camera_cy = 221.506;
 
+    private double wheelPower = 0.5;
+    private double sliderPower = 0.5;
+    private double rotBasePower = 0.5;
 
 
     StimDC(DcMotor front_left, DcMotor front_right, DcMotor back_left, DcMotor back_right,DcMotor rotatory_base, DcMotor slider,DcMotor arm,Servo c1, Servo c2) {
@@ -90,14 +93,17 @@ public class StimDC {
         this.back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    public void run_using_encoders_rotatory_slider(){
+        this.rotatory_base.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
     public void run_using_encoders_slider(){
         this.slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void run_using_encoders(){
         run_using_encoders_wheel_motors();
         run_using_encoders_slider();
-        this.rotatory_base.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        run_using_encoders_rotatory_slider();
+        //this.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -122,10 +128,13 @@ public class StimDC {
     public void reset_encoders_slider(){
         this.slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
+    public void reset_encoders_rotatory_base(){
+        this.rotatory_base.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
     public void reset_encoders(){
         reset_encoders_wheel_motors();
         reset_encoders_slider();
-        //this.rotatory_base.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        reset_encoders_rotatory_base();
         //this.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
@@ -170,8 +179,8 @@ public class StimDC {
     }
 
     //rotates the rotatory base for the slider
-    public void slider_base_rotate(double degrees,double power,String dir){
-        double dis_for_right_angle = 3.75;
+    public void rotate_rotatory_base(double degrees,double power,String dir){
+        double dis_for_right_angle = 11.4;
 
         this.rotatory_base.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         if(dir.equals("right")){
@@ -290,8 +299,12 @@ public class StimDC {
         this.back_left.setPower(0);
 
     }
+    public void stop_rotatory_base(){
+        this.rotatory_base.setPower(0);
+    }
     public void stop_slider(){
         this.slider.setPower(0);
+
     }
     public void stop () {
         stop_wheel_motors();
@@ -306,10 +319,16 @@ public class StimDC {
 
         }
     }
+    public void wait_rotatory_base(){
+        while(this.rotatory_base.isBusy()){
+
+        }
+    }
+
     public void wait_slider(){
         //telemetry.addLine("waiting slider motor");
         //telemetry.update();
-        while(this.slider.isBusy()){
+        while(this.slider.isBusy() ){
 
         }
     }
@@ -319,6 +338,25 @@ public class StimDC {
         while((this.front_left.isBusy() && this.front_right.isBusy() && this.back_left.isBusy() && this.back_right.isBusy() ) || this.rotatory_base.isBusy() || this.slider.isBusy()){
 
         }
+    }
+    public void setWheelPower(double wheelPower){
+        this.wheelPower  = wheelPower;
+    }
+    public double getWheelPower(){
+        return this.wheelPower;
+    }
+
+    public void setSliderPower(double sliderPower){
+        this.sliderPower = sliderPower;
+    }
+    public double getSliderPower(){
+        return this.sliderPower;
+    }
+    public void setRotBasePower(double rotBasePower){
+        this.rotBasePower = rotBasePower;
+    }
+    public double getRotBasePOwer(){
+        return this.rotBasePower;
     }
 
 }

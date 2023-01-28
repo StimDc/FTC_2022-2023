@@ -144,6 +144,7 @@ public class DreaptaMediuCuCameraFB extends LinearOpMode
                 if(tagFound == true)
                 {
                     telemetry.addLine("Image was found ");
+                    telemetry.addLine(direction);
 
                 }
                 else

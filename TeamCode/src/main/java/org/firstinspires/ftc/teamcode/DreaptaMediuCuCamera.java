@@ -177,6 +177,16 @@ public class DreaptaMediuCuCamera extends LinearOpMode
         robot.run_using_encoders();
         robot.reset_encoders();
 
+        robot.forward(70,robot.getWheelPower());
+        robot.wait_wheel_motors();
+        robot.stop_wheel_motors();
+
+
+
+
+        robot.run_using_encoders();
+        robot.reset_encoders();
+
         robot.forward(70,0.5);
         robot.wait_wheel_motors();
         robot.stop_wheel_motors();
@@ -210,7 +220,7 @@ public class DreaptaMediuCuCamera extends LinearOpMode
         robot.lateral(85,0.5,"left");
         robot.wait_wheel_motors();
         robot.stop_wheel_motors();
-        
+
 
             
     }
