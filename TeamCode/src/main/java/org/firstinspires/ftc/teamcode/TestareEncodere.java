@@ -39,6 +39,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.checkerframework.checker.units.qual.K;
+
 
 //the conversion has a 3% error for every 100 cm the robot runs for 103 cm
 
@@ -61,7 +63,7 @@ public class TestareEncodere extends LinearOpMode {
 
     
     @Override
-    public void runOpMode() {
+     public void runOpMode() {
 
         telemetry.addData("Status", "Test");
         telemetry.update();
@@ -87,9 +89,10 @@ public class TestareEncodere extends LinearOpMode {
         back_right.setDirection(DcMotor.Direction.FORWARD);
         slider.setDirection(DcMotor.Direction.REVERSE);
         arm.setDirection(DcMotor.Direction.FORWARD);
-        //rotatory_base.setDirection(DcMotor.Direction.FORWARD);
+        rotatory_base.setDirection(DcMotor.Direction.REVERSE);
 
         StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base,slider,arm,c1,c2);
+        KStimDC krobot = new KStimDC(front_left,front_right,back_left,back_right,rotatory_base,slider,arm,c1,c2)
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -97,7 +100,7 @@ public class TestareEncodere extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             robot.run_using_encoders();
-            /*
+
             robot.reset_encoders();
             robot.forward(70,0.3);
             robot.wait_motors();
@@ -150,7 +153,7 @@ public class TestareEncodere extends LinearOpMode {
             robot.slider_base_rotate(180,0.3,"left");
             robot.wait_motors();
             robot.stop();
-            */
+
             robot.reset_encoders();
             robot.sliderup(10,0.1);
             robot.wait_motors();
@@ -162,8 +165,18 @@ public class TestareEncodere extends LinearOpMode {
             robot.wait_motors();
             robot.stop();
         
-            
-            
+            */
+            robot.run_using_encoders();
+            robot.reset_encoders();
+            telemetry.addLine("test1");
+            telemetry.update();
+            //robot.slider_base_rotate(180,0.3,"left");
+            telemetry.addLine("test2");
+            telemetry.update();
+            //robot.wait_rotate_slider();
+            telemetry.addLine("test3");
+            telemetry.update();
+            robot.stop_slider();
             sleep(30000); //after execution, the program will wait until the times end so it doesnt loop
         }
 
