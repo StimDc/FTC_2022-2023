@@ -115,20 +115,20 @@ public class TestareCamera extends LinearOpMode {
             
             robot.run_using_encoders();
             robot.reset_encoders();
-            robot.slider_base_rotate(65,0.9,"left");
+            robot.rotate_rotatory_base(65,0.9,"left");
             robot.wait_motors();
             robot.stop();
             sleep(1000);
             
             for(int i = 1;i<=5;i++){
                robot.reset_encoders();
-                robot.slider_base_rotate(145,0.9,"right");
+                robot.rotate_rotatory_base(145,0.9,"right");
                 robot.wait_motors();
                 robot.stop();
                 sleep(1000); 
                 
                 robot.reset_encoders();
-                robot.slider_base_rotate(145,0.9,"left");
+                robot.rotate_rotatory_base(145,0.9,"left");
                 robot.wait_motors();
                 robot.stop();
                 sleep(1000);

@@ -103,7 +103,7 @@ public class TestareEncodere extends LinearOpMode {
             robot.wait_motors();
             robot.stop();
             
-            robot.reset_encoders();
+            /*robot.reset_encoders();
             robot.forward(-70,0.3);
             robot.wait_motors();
             robot.stop();
@@ -162,18 +162,19 @@ public class TestareEncodere extends LinearOpMode {
             robot.wait_motors();
             robot.stop();
         
-            */
+
             robot.run_using_encoders();
             robot.reset_encoders();
             telemetry.addLine("test1");
             telemetry.update();
-            robot.slider_base_rotate(180,0.3,"left");
+            robot.rotate_rotatory_base(180,0.3,"left");
             telemetry.addLine("test2");
             telemetry.update();
-            robot.wait_rotate_slider();
+
             telemetry.addLine("test3");
             telemetry.update();
             robot.stop_slider();
+            */
             sleep(30000); //after execution, the program will wait until the times end so it doesnt loop
         }
 

@@ -16,12 +16,12 @@ public class TestareSasiu extends OpMode {
     DcMotor back_left;
     DcMotor back_right;
     DcMotor slider;
-    //DcMotor rotatory_base;
+    DcMotor rotatory_base;
     Servo c1,c2 = null;
 
     double drivePower;
-    double sliderPower;
-    double rotating_devicePower;
+    double sliderPower = 0.1;
+    double rotating_devicePower=0.5;
     double brat_position = 0;
     double claw_position = 0;
     double vacuum_Power;
@@ -35,14 +35,14 @@ public class TestareSasiu extends OpMode {
         back_left = hardwareMap.dcMotor.get("BL");
         back_right = hardwareMap.dcMotor.get("BR");
         slider = hardwareMap.dcMotor.get("SL");
-        //rotatory_base = hardwareMap.dcMotor.get("RB");
+        rotatory_base = hardwareMap.dcMotor.get("RB");
         c1 = hardwareMap.servo.get("C1");
         c2 = hardwareMap.servo.get("C2");
         front_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         back_right.setDirection(DcMotor.Direction.FORWARD);
-        //rotatory_base.setDirection(DcMotor.Direction.FORWARD);
+        rotatory_base.setDirection(DcMotor.Direction.FORWARD);
         slider.setDirection(DcMotor.Direction.REVERSE);
         //slider.setDirection(DcMotor.Direction.FORWARD);
 
@@ -136,22 +136,26 @@ public class TestareSasiu extends OpMode {
 
 
         if(gamepad2.left_stick_y < -0.5 ){
+            //slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             slider.setPower(sliderPower);
         }else if(gamepad2.left_stick_y > 0.5){
 
             slider.setPower(-sliderPower);
         }else {
             slider.setPower(0);
+            slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
         if(gamepad2.right_stick_x > 0.5){
-            //rotatory_base.setPower(-sliderPower);
+            rotatory_base.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            rotatory_base.setPower(-rotating_devicePower);
         }
         else if(gamepad2.right_stick_x < -0.5){
-            //rotatory_base.setPower(sliderPower);
+
+            rotatory_base.setPower(rotating_devicePower);
         }
         else{
-            //rotatory_base.setPower(0);
+            rotatory_base.setPower(0);
         }
             if(gamepad2.triangle){
                 //slider.setPower(0.5);

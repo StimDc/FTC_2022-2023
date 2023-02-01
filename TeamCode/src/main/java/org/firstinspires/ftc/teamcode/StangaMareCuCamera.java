@@ -37,8 +37,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 import java.util.ArrayList;
 
 @Autonomous(name="Stanga mare cu camera", group="Linear Opmode")
-public class StangaMareCuCamera extends LinearOpMode
-{
+public class StangaMareCuCamera extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -46,57 +45,57 @@ public class StangaMareCuCamera extends LinearOpMode
     // UNITS ARE PIXELS
     // NOTE: this calibration is for the C920 webcam at 800x448.
     // You will need to do your own calibration for other configurations!
-    
+
 
     // UNITS ARE METERS
     double tagsize = 0.166;
-    
-     // Tag ID 18 from the 36h11 family
-    int[] TAGS = {17,18,19};
+
+    // Tag ID 18 from the 36h11 family
+    int[] TAGS = {17, 18, 19};
     String id;
     AprilTagDetection tagOfInterest = null;
     String direction;
-    private DcMotor front_left=null;
-    private DcMotor front_right=null;
-    private DcMotor back_left=null;
-    private DcMotor back_right=null;
-    private DcMotor slider=null;
+    private DcMotor front_left = null;
+    private DcMotor front_right = null;
+    private DcMotor back_left = null;
+    private DcMotor back_right = null;
+    private DcMotor slider = null;
     private DcMotor rotatory_base = null;
     private DcMotor arm = null;
-    
+
     private Servo c1 = null;
     private Servo c2 = null;
+
     @Override
-    public void runOpMode()
-    {
-        front_left=hardwareMap.get(DcMotor.class, "FL");
-        front_right=hardwareMap.get(DcMotor.class, "FR");
-        back_left=hardwareMap.get(DcMotor.class, "BL");
-        back_right=hardwareMap.get(DcMotor.class, "BR");
-        slider=hardwareMap.get(DcMotor.class, "SL");
-        rotatory_base = hardwareMap.get(DcMotor.class,"RB");
+    public void runOpMode() {
+        front_left = hardwareMap.get(DcMotor.class, "FL");
+        front_right = hardwareMap.get(DcMotor.class, "FR");
+        back_left = hardwareMap.get(DcMotor.class, "BL");
+        back_right = hardwareMap.get(DcMotor.class, "BR");
+        slider = hardwareMap.get(DcMotor.class, "SL");
+        rotatory_base = hardwareMap.get(DcMotor.class, "RB");
         arm = hardwareMap.get(DcMotor.class, "AR");
-        
-        c1 = hardwareMap.get(Servo.class , "C1");
+
+        c1 = hardwareMap.get(Servo.class, "C1");
         c2 = hardwareMap.get(Servo.class, "C2");
-        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base,slider,arm,c1,c2);
+        StimDC robot = new StimDC(front_left, front_right, back_left, back_right, rotatory_base, slider, arm, c1, c2);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, robot.camera_fx, robot.camera_fy, robot.camera_cx, robot.camera_cy);
 
         camera.setPipeline(aprilTagDetectionPipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened(){
-                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode){
-                
+            public void onError(int errorCode) {
+
             }
-            
+
         });
 
         telemetry.setMsTransmissionInterval(50);
@@ -105,58 +104,47 @@ public class StangaMareCuCamera extends LinearOpMode
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (!isStarted() && !isStopRequested())
-        {
+        while (!isStarted() && !isStopRequested()) {
             ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
-            if(currentDetections.size() != 0)
-            {
+            if (currentDetections.size() != 0) {
                 boolean tagFound = false;
 
-                for(AprilTagDetection tag : currentDetections)
-                {
-                    for(int i = 0;i<3;i++){
-                        if( tag.id == TAGS[i]){
-                            if(tag.id == 17){
+                for (AprilTagDetection tag : currentDetections) {
+                    for (int i = 0; i < 3; i++) {
+                        if (tag.id == TAGS[i]) {
+                            if (tag.id == 17) {
                                 direction = "left";
-                            }
-                            else if(tag.id == 18){
+                            } else if (tag.id == 18) {
                                 direction = "straight";
-                            }
-                            else{
+                            } else {
                                 direction = "right";
                             }
-                            
+
                             tagOfInterest = tag;
                             tagFound = true;
                             break;
                         }
                     }
-                    
+
                 }
 
-                if(tagFound == true)
-                {
+                if (tagFound == true) {
                     telemetry.addLine("Image was found ");
-                   
-                }
-                else
-                {
+
+                } else {
                     telemetry.addLine("NO IMAGE WAS FOUND YOU MAY CHANGE AUTONOMOUS");
 
-                    if(tagOfInterest == null)
-                    {
+                    if (tagOfInterest == null) {
                         telemetry.addLine("REALLY CHANGE THE AUTONOMOUS");
-                    }
-                    else
-                    {
+                    } else {
                         //robot.telemetry.addLine("its good lmao");
                         //robot.tagToTelemetry(tagOfInterest);
                     }
                 }
 
             }
-            
+
 
             telemetry.update();
             sleep(20);
@@ -168,69 +156,67 @@ public class StangaMareCuCamera extends LinearOpMode
          */
 
         /* Update the telemetry */
-            autonomie(robot);
-            sleep(30000);
+        autonomie(robot);
+        sleep(30000);
 
 
-       
     }
-    public void autonomie(StimDC robot){
+
+    public void autonomie(StimDC robot) {
         robot.run_using_encoders();
-            
+
         robot.reset_encoders();
-        robot.forward(130,0.5);
+        robot.forward(130, 0.5);
         robot.wait_motors();
         robot.stop();
-            
+
         robot.reset_encoders();
-        robot.lateral(30,0.5,"left");
+        robot.lateral(30, 0.5, "left");
         robot.wait_motors();
         robot.stop();
-            
+
         robot.run_using_encoders();
         robot.reset_encoders();
-        robot.slider_base_rotate(65,0.6,"right");
+        robot.rotate_rotatory_base(65, 0.6, "right");
         robot.wait_motors();
         robot.stop();
         sleep(1000);
-        for(int i = 1;i<=5;i++){
-           robot.reset_encoders();
-            robot.slider_base_rotate(170,0.6,"left");
+        for (int i = 1; i <= 5; i++) {
+            robot.reset_encoders();
+            robot.rotate_rotatory_base(170, 0.6, "left");
             robot.wait_motors();
             robot.stop();
-            sleep(1000); 
-            
+            sleep(1000);
+
             robot.reset_encoders();
-            robot.slider_base_rotate(170,0.6,"right");
+            robot.rotate_rotatory_base(170, 0.6, "right");
             robot.wait_motors();
             robot.stop();
             sleep(1000);
         }
-        
+
         robot.run_using_encoders();
         robot.reset_encoders();
-        robot.lateral(30,0.5,"right");
+        robot.lateral(30, 0.5, "right");
         robot.wait_motors();
         robot.stop();
-        
+
         robot.reset_encoders();
-        robot.forward(-61,0.5);
+        robot.forward(-61, 0.5);
         robot.wait_motors();
         robot.stop();
-        if(direction != "straight"){
-            parking(robot,direction);
-        }
-        
-            
-    }
-    
-     public void parking(StimDC robot,String dir){
-            robot.reset_encoders();
-            robot.lateral(60,0.5,dir);
-            robot.wait_motors();
-            robot.stop();
-            
+        if (direction != "straight") {
+            parking(robot, direction);
         }
 
-   
+
+    }
+
+    public void parking(StimDC robot, String dir) {
+        robot.reset_encoders();
+        robot.lateral(60, 0.5, dir);
+        robot.wait_motors();
+        robot.stop();
+
+    }
 }
