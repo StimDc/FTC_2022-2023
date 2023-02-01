@@ -49,6 +49,7 @@ public class ControlPart extends OpMode {
         }
 
         if(gamepad1.right_trigger >0){
+
             frontRight.setPower(gamepad1.right_trigger);
             frontLeft.setPower(-gamepad1.right_trigger);
             backRight.setPower(-gamepad1.right_trigger);
