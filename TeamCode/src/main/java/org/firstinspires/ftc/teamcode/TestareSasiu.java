@@ -142,6 +142,7 @@ public class TestareSasiu extends OpMode {
 
             slider.setPower(-sliderPower);
         }else {
+
             slider.setPower(0);
             slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
