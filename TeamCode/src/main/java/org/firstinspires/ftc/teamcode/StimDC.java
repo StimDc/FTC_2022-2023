@@ -86,6 +86,9 @@ public class StimDC {
     }
     */
     //sets motors to run with encoders
+    public void runUsingEncodersWheelMotors(){
+        run_using_encoders_wheel_motors();
+    }
     public void run_using_encoders_wheel_motors(){
         this.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -246,6 +249,7 @@ public class StimDC {
     private void fluid_power(double power){
         for(double i =0.0;i<power;i+=0.1){
             set_power(i);
+            wait(20);
         }
     }
 

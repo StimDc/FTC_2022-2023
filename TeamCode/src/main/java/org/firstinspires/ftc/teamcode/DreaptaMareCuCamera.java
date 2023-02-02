@@ -173,6 +173,7 @@ public class DreaptaMareCuCamera extends LinearOpMode
        
     }
     public void autonomie(StimDC robot){
+        
         robot.run_using_encoders();
             
         robot.reset_encoders();
