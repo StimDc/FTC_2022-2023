@@ -100,7 +100,7 @@ public class TestareEncodere extends LinearOpMode {
 
             robot.reset_encoders();
             robot.forward(70,0.3);
-            robot.wait_motors();
+            robot.waitMotors();
             robot.stop();
             
             /*robot.reset_encoders();

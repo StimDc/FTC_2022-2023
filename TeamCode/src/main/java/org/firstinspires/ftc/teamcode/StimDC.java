@@ -98,23 +98,23 @@ public class StimDC {
 
     //resets encoders for setting new distance
 
-    public void reset_encoders_wheel_motors(){
+    public void resetEncodersWheelMotors(){
         this.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void reset_encoders_slider(){
+    public void resetEncodersSlider(){
         this.slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-    public void reset_encoders_rotatoryBase(){
+    public void resetEncodersRotatoryBase(){
         this.rotatoryBase.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
     public void reset_encoders(){
-        reset_encoders_wheel_motors();
-        reset_encoders_slider();
-        reset_encoders_rotatoryBase();
+        resetEncodersWheelMotors();
+        resetEncodersSlider();
+        resetEncodersRotatoryBase();
         //this.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
@@ -123,7 +123,7 @@ public class StimDC {
         return (cm/2.54);
     }
     ///converts physical distance into ticks so that the robot can understand
-    public int  calculate_distance(double distance,double wheel_diameter, double ticks){
+    public int  calculateDistance(double distance,double wheel_diameter, double ticks){
         distance = cm_to_inch(distance);
 
         return (int)((distance/wheel_diameter) * ticks);
@@ -145,10 +145,10 @@ public class StimDC {
             distance = distance;
         }
 
-        this.frontLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.backLeft.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.frontRight.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.backRight.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontLeft.setTargetPosition(calculateDistance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backLeft.setTargetPosition(calculateDistance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontRight.setTargetPosition(calculateDistance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backRight.setTargetPosition(calculateDistance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
 
         runToPosition();
 
@@ -159,7 +159,7 @@ public class StimDC {
     }
 
     //rotates the rotatory base for the slider
-    public void rotate_rotatory_base(double degrees,double power,String dir){
+    public void rotateRotatoryBase(double degrees,double power,String dir){
         double dis_for_right_angle = 11.4;
 
         this.rotatoryBase.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -173,7 +173,7 @@ public class StimDC {
 
         }
         double distance = (degrees/90) * dis_for_right_angle;
-        this.rotatoryBase.setTargetPosition(calculate_distance(distance,ROTATORY_BASE,REV_TICKS_PER_REV));
+        this.rotatoryBase.setTargetPosition(calculateDistance(distance,ROTATORY_BASE,REV_TICKS_PER_REV));
 
         this.rotatoryBase.setPower(power);
 
@@ -196,10 +196,10 @@ public class StimDC {
             distance = -distance;
         }
 
-        this.frontLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.frontRight.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.backLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.backRight.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontLeft.setTargetPosition(calculateDistance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontRight.setTargetPosition(calculateDistance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backLeft.setTargetPosition(calculateDistance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backRight.setTargetPosition(calculateDistance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
 
         //set_power(power);
         fluidPower(power);
@@ -208,10 +208,10 @@ public class StimDC {
     public void forward(double distance,double power){
 
         distance = distance * 0.934579439252d;
-        this.frontLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.backLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.frontRight.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.backRight.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontLeft.setTargetPosition(calculateDistance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backLeft.setTargetPosition(calculateDistance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontRight.setTargetPosition(calculateDistance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backRight.setTargetPosition(calculateDistance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
 
         runToPosition();
         //set_power(power);
@@ -248,7 +248,7 @@ public class StimDC {
 
     public void sliderUp(double distance, double power){
         //distance = distance;
-        this.slider.setTargetPosition(calculate_distance(distance,SLIDER_WHEEL,GO_TICKS_PER_REV));
+        this.slider.setTargetPosition(calculateDistance(distance,SLIDER_WHEEL,GO_TICKS_PER_REV));
         this.slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.slider.setPower(power);
 
@@ -256,7 +256,7 @@ public class StimDC {
 
     public void sliderDown (double distance, double power){
         distance = -distance;
-        this.slider.setTargetPosition(calculate_distance(distance,SLIDER_WHEEL,GO_TICKS_PER_REV));
+        this.slider.setTargetPosition(calculateDistance(distance,SLIDER_WHEEL,GO_TICKS_PER_REV));
         this.slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.slider.setPower(power);
     }
@@ -293,28 +293,21 @@ public class StimDC {
         this.arm.setPower(0);
     }
 
-    @Deprecated
-    public void wait_wheel_motors(){
-        //telemetry.addLine("waiting wheel motors");
-        //telemetry.update();
-        while(this.frontLeft.isBusy() && this.frontRight.isBusy() && this.backLeft.isBusy() && this.backRight.isBusy()){
 
-        }
-    }
-    public void wait_rotatoryBase(){
+    public void waitRotatoryBase(){
         while(this.rotatoryBase.isBusy()){
 
         }
     }
 
-    public void wait_slider(){
+    public void waitSlider(){
         //telemetry.addLine("waiting slider motor");
         //telemetry.update();
         while(this.slider.isBusy() ){
 
         }
     }
-    public void wait_motors(){
+    public void waitMotors(){
         //telemetry.addLine("waiting ALL motors");
         //telemetry.update();
         while((this.frontLeft.isBusy() && this.frontRight.isBusy() && this.backLeft.isBusy() && this.backRight.isBusy() ) || this.rotatoryBase.isBusy() || this.slider.isBusy()){

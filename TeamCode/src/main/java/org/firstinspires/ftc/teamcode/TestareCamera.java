@@ -92,44 +92,44 @@ public class TestareCamera extends LinearOpMode {
             
             robot.reset_encoders();
             robot.forward(145,0.5);
-            robot.wait_motors();
+            robot.waitMotors();
             robot.stop();
             
             robot.reset_encoders();
             robot.forward(-15,0.5);
-            robot.wait_motors();
+            robot.waitMotors();
             robot.stop();
             
             robot.reset_encoders();
             robot.rotate(180,0.5,"left");
-            robot.wait_motors();
+            robot.waitMotors();
             robot.stop();
             
             sleep(500);
             robot.reset_encoders();
             robot.lateral(24,0.5,"right");
-            robot.wait_motors();
+            robot.waitMotors();
             robot.stop();
             
             sleep(500);
             
             robot.runUsingEncoders();
             robot.reset_encoders();
-            robot.rotate_rotatory_base(65,0.9,"left");
-            robot.wait_motors();
+            robot.rotateRotatoryBase(65,0.9,"left");
+            robot.waitMotors();
             robot.stop();
             sleep(1000);
             
             for(int i = 1;i<=5;i++){
                robot.reset_encoders();
-                robot.rotate_rotatory_base(145,0.9,"right");
-                robot.wait_motors();
+                robot.rotateRotatoryBase(145,0.9,"right");
+                robot.waitMotors();
                 robot.stop();
                 sleep(1000); 
                 
                 robot.reset_encoders();
-                robot.rotate_rotatory_base(145,0.9,"left");
-                robot.wait_motors();
+                robot.rotateRotatoryBase(145,0.9,"left");
+                robot.waitMotors();
                 robot.stop();
                 sleep(1000);
             }
@@ -137,17 +137,17 @@ public class TestareCamera extends LinearOpMode {
             robot.runUsingEncoders();
             robot.reset_encoders();
             robot.lateral(24,0.5,"left");
-            robot.wait_motors();
+            robot.waitMotors();
             robot.stop();
             
             robot.reset_encoders();
             robot.forward(120,0.6);
-            robot.wait_motors();
+            robot.waitMotors();
             robot.stop();
             
             robot.reset_encoders();
             robot.lateral(54,0.5,"right");
-            robot.wait_motors();
+            robot.waitMotors();
             robot.stop();
             /*
             robot.reset_encoders();
