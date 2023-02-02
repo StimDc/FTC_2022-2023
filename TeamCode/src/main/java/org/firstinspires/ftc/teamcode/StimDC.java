@@ -7,10 +7,19 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 //Class to handle robot movements to reuse in other files
-public class StimDC {
+class constants{
     private static final double GO_TICKS_PER_REV = 537.7d;
     private static final double PI = 3.14159265d;
 
+    private static final double  WHEEL_CIRCUMFERENCE =  PI * 3.7795d;
+    private static final double CONST_LATERAL_MOVEMENT = 1.136363636363d;
+    private static final double SLIDER_WHEEL =PI * 0.440944882d;
+    private static final double ROTATORY_BASE = PI *5.90551181d;
+    private static final double REV_TICKS_PER_REV = 288d;
+}
+public class StimDC {
+    private static final double GO_TICKS_PER_REV = 537.7d;
+    private static final double PI = 3.14159265d;
     private static final double  WHEEL_CIRCUMFERENCE =  PI * 3.7795d;
     private static final double CONST_LATERAL_MOVEMENT = 1.136363636363d;
     private static final double SLIDER_WHEEL =PI * 0.440944882d;
@@ -58,37 +67,16 @@ public class StimDC {
 
 
     }
-    /*
-   StimDC(){
-        init_slider(c1, c2);
-       init_wheel_motor(frontLeft, frontRight, backLeft, backRight);
-   }
-
     
-    public void init_wheel_motors(DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight){
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
-
-        this.frontLeft = frontLeft;
-        this.frontRight = frontRight;
-        this.backLeft = backLeft;
-        this.backRight = backRight;
-    }
-
-    public void init_slider(DcMotor slider, Servo c1, Servo c2){
-        slider.setDirection(DcMotor.Direction.FORWARD);
-
-        this.slider = slider;
-        this.c1 = c1;
-        this.c2 = c2;
-    }
-    */
     //sets motors to run with encoders
     public void runUsingEncodersWheelMotors(){
-        run_using_encoders_wheel_motors();
+        this.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+    @Deprecated
     public void run_using_encoders_wheel_motors(){
         this.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -96,6 +84,7 @@ public class StimDC {
         this.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    
     public void run_using_encoders_rotatory_slider(){
         this.rotatoryBase.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -224,7 +213,8 @@ public class StimDC {
         this.backLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
         this.backRight.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
 
-        set_power(power);
+        //set_power(power);
+        fluidPower(power);
     }
 
     public void forward(double distance,double power){
@@ -237,7 +227,7 @@ public class StimDC {
 
         run_to_position();
         //set_power(power);
-        fluid_power(power);
+        fluidPower(power);
         
 
         
@@ -246,10 +236,16 @@ public class StimDC {
 
     }
 
-    private void fluid_power(double power){
-        for(double i =0.0;i<power;i+=0.1){
+    private void fluidPower(double power){
+        for(double i =0.0;i<=power;i+=0.1){
             set_power(i);
             wait(20);
+        }
+    }
+
+    private void fluidPowerRotBase(double power){
+        for(double i = 0.0;i<=power;i++){
+            this.rotatoryBase.setPower(i);
         }
     }
 
@@ -326,6 +322,8 @@ public class StimDC {
         this.rotatoryBase.setPower(0);
         this.arm.setPower(0);
     }
+
+    @Deprecated
     public void wait_wheel_motors(){
         //telemetry.addLine("waiting wheel motors");
         //telemetry.update();
@@ -369,9 +367,23 @@ public class StimDC {
     public void setRotBasePower(double rotBasePower){
         this.rotBasePower = rotBasePower;
     }
+    
     public double getRotBasePOwer(){
         return this.rotBasePower;
     }
+
+
+
+
+    /*
+     * renaming  functions
+     */
+
+     public void waitWheelMotors(){
+        while(this.frontLeft.isBusy() && this.frontRight.isBusy() && this.backLeft.isBusy() && this.backRight.isBusy()){
+            
+        }
+     }
 
 }
 
