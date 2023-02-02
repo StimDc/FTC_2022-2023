@@ -16,12 +16,12 @@ public class StimDC {
     private static final double SLIDER_WHEEL =PI * 0.440944882d;
     private static final double ROTATORY_BASE = PI *5.90551181d;
     private static final double REV_TICKS_PER_REV = 288d;
-    private DcMotor front_left;
-    private DcMotor front_right;
-    private DcMotor back_left;
-    private DcMotor back_right;
+    private DcMotor frontLeft;
+    private DcMotor frontRight;
+    private DcMotor backLeft;
+    private DcMotor backRight;
     private DcMotor slider ;
-    private DcMotor rotatory_base;
+    private DcMotor rotatoryBase;
     private DcMotor arm;
     private Servo c1 ;
     private Servo c2;
@@ -35,22 +35,22 @@ public class StimDC {
     private double rotBasePower = 0.5;
 
 
-    StimDC(DcMotor front_left, DcMotor front_right, DcMotor back_left, DcMotor back_right,DcMotor rotatory_base, DcMotor slider,DcMotor arm,Servo c1, Servo c2) {
+    StimDC(DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight,DcMotor rotatoryBase, DcMotor slider,DcMotor arm,Servo c1, Servo c2) {
 
-        front_left.setDirection(DcMotor.Direction.REVERSE);
-        front_right.setDirection(DcMotor.Direction.FORWARD);
-        back_left.setDirection(DcMotor.Direction.REVERSE);
-        back_right.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
         slider.setDirection(DcMotor.Direction.FORWARD);
-        rotatory_base.setDirection(DcMotor.Direction.REVERSE);
+        rotatoryBase.setDirection(DcMotor.Direction.REVERSE);
         arm.setDirection(DcMotor.Direction.FORWARD);
 
-        this.front_left = front_left;
-        this.front_right = front_right;
-        this.back_left = back_left;
-        this.back_right = back_right;
+        this.frontLeft = frontLeft;
+        this.frontRight = frontRight;
+        this.backLeft = backLeft;
+        this.backRight = backRight;
         this.slider = slider;
-        this.rotatory_base = rotatory_base;
+        this.rotatoryBase = rotatoryBase;
         this.arm = arm;
         this.c1 = c1;
         this.c2 = c2;
@@ -61,20 +61,20 @@ public class StimDC {
     /*
    StimDC(){
         init_slider(c1, c2);
-       init_wheel_motor(front_left, front_right, back_left, back_right);
+       init_wheel_motor(frontLeft, frontRight, backLeft, backRight);
    }
 
     
-    public void init_wheel_motors(DcMotor front_left, DcMotor front_right, DcMotor back_left, DcMotor back_right){
-        front_left.setDirection(DcMotor.Direction.REVERSE);
-        front_right.setDirection(DcMotor.Direction.FORWARD);
-        back_left.setDirection(DcMotor.Direction.REVERSE);
-        back_right.setDirection(DcMotor.Direction.FORWARD);
+    public void init_wheel_motors(DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight){
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
 
-        this.front_left = front_left;
-        this.front_right = front_right;
-        this.back_left = back_left;
-        this.back_right = back_right;
+        this.frontLeft = frontLeft;
+        this.frontRight = frontRight;
+        this.backLeft = backLeft;
+        this.backRight = backRight;
     }
 
     public void init_slider(DcMotor slider, Servo c1, Servo c2){
@@ -87,14 +87,14 @@ public class StimDC {
     */
     //sets motors to run with encoders
     public void run_using_encoders_wheel_motors(){
-        this.front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void run_using_encoders_rotatory_slider(){
-        this.rotatory_base.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.rotatoryBase.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void run_using_encoders_slider(){
         this.slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -109,32 +109,32 @@ public class StimDC {
 
     //prepares the motors to run to position
     public void run_to_position(){
-        this.back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        this.back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        this.front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        this.front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
 
     //resets encoders for setting new distance
 
     public void reset_encoders_wheel_motors(){
-        this.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void reset_encoders_slider(){
         this.slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-    public void reset_encoders_rotatory_base(){
-        this.rotatory_base.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void reset_encoders_rotatoryBase(){
+        this.rotatoryBase.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
     public void reset_encoders(){
         reset_encoders_wheel_motors();
         reset_encoders_slider();
-        reset_encoders_rotatory_base();
+        reset_encoders_rotatoryBase();
         //this.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
@@ -165,10 +165,10 @@ public class StimDC {
             distance = distance;
         }
 
-        this.front_left.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.back_left.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.front_right.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.back_right.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backLeft.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontRight.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backRight.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
 
         run_to_position();
 
@@ -179,10 +179,10 @@ public class StimDC {
     }
 
     //rotates the rotatory base for the slider
-    public void rotate_rotatory_base(double degrees,double power,String dir){
+    public void rotate_rotatoryBase(double degrees,double power,String dir){
         double dis_for_right_angle = 11.4;
 
-        this.rotatory_base.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.rotatoryBase.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         if(dir.equals("right")){
             degrees = degrees;
 
@@ -193,9 +193,9 @@ public class StimDC {
 
         }
         double distance = (degrees/90) * dis_for_right_angle;
-        this.rotatory_base.setTargetPosition(calculate_distance(distance,ROTATORY_BASE,REV_TICKS_PER_REV));
+        this.rotatoryBase.setTargetPosition(calculate_distance(distance,rotatoryBase,REV_TICKS_PER_REV));
 
-        this.rotatory_base.setPower(power);
+        this.rotatoryBase.setPower(power);
 
     }
     //function for the rotational movement, takes degrees and converts into distance
@@ -216,10 +216,10 @@ public class StimDC {
             distance = -distance;
         }
 
-        this.front_left.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.front_right.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.back_left.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.back_right.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontRight.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backRight.setTargetPosition(calculate_distance(-distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
 
         set_power(power);
     }
@@ -227,16 +227,26 @@ public class StimDC {
     public void forward(double distance,double power){
 
         distance = distance * 0.934579439252d;
-        this.front_left.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.back_left.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.front_right.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
-        this.back_right.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backLeft.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.frontRight.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
+        this.backRight.setTargetPosition(calculate_distance(distance,WHEEL_CIRCUMFERENCE,GO_TICKS_PER_REV));
 
         run_to_position();
-        set_power(power);
+        //set_power(power);
+        fluid_power(power);
+        
+
+        
 
 
 
+    }
+
+    private void fluid_power(double power){
+        for(double i =0.0;i<power;i+=0.1){
+            set_power(i);
+        }
     }
 
     public void grab_cone(){
@@ -285,22 +295,22 @@ public class StimDC {
         this.c2.setPosition(0.4);
     }
     public void set_power(double power){
-        this.front_left.setPower(power);
-        this.front_right.setPower(power);
-        this.back_left.setPower(power);
-        this.back_right.setPower(power);
+        this.frontLeft.setPower(power);
+        this.frontRight.setPower(power);
+        this.backLeft.setPower(power);
+        this.backRight.setPower(power);
 
 
     }
     public void stop_wheel_motors(){
-        this.front_right.setPower(0);
-        this.front_left.setPower(0);
-        this.back_right.setPower(0);
-        this.back_left.setPower(0);
+        this.frontRight.setPower(0);
+        this.frontLeft.setPower(0);
+        this.backRight.setPower(0);
+        this.backLeft.setPower(0);
 
     }
-    public void stop_rotatory_base(){
-        this.rotatory_base.setPower(0);
+    public void stop_rotatoryBase(){
+        this.rotatoryBase.setPower(0);
     }
     public void stop_slider(){
         this.slider.setPower(0);
@@ -309,18 +319,18 @@ public class StimDC {
     public void stop () {
         stop_wheel_motors();
         stop_slider();
-        this.rotatory_base.setPower(0);
+        this.rotatoryBase.setPower(0);
         this.arm.setPower(0);
     }
     public void wait_wheel_motors(){
         //telemetry.addLine("waiting wheel motors");
         //telemetry.update();
-        while(this.front_left.isBusy() && this.front_right.isBusy() && this.back_left.isBusy() && this.back_right.isBusy()){
+        while(this.frontLeft.isBusy() && this.frontRight.isBusy() && this.backLeft.isBusy() && this.backRight.isBusy()){
 
         }
     }
-    public void wait_rotatory_base(){
-        while(this.rotatory_base.isBusy()){
+    public void wait_rotatoryBase(){
+        while(this.rotatoryBase.isBusy()){
 
         }
     }
@@ -335,7 +345,7 @@ public class StimDC {
     public void wait_motors(){
         //telemetry.addLine("waiting ALL motors");
         //telemetry.update();
-        while((this.front_left.isBusy() && this.front_right.isBusy() && this.back_left.isBusy() && this.back_right.isBusy() ) || this.rotatory_base.isBusy() || this.slider.isBusy()){
+        while((this.frontLeft.isBusy() && this.frontRight.isBusy() && this.backLeft.isBusy() && this.backRight.isBusy() ) || this.rotatoryBase.isBusy() || this.slider.isBusy()){
 
         }
     }
@@ -360,3 +370,4 @@ public class StimDC {
     }
 
 }
+
