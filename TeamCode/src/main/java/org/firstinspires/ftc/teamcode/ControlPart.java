@@ -22,7 +22,7 @@ public class ControlPart extends OpMode {
     DcMotor rotatoryBase,slider;
     Servo c1,c2;
     double drivePower;
-    double distance = 0;
+    double heightSlider = 0;
     double bigPole = 70;
     double mediumPole = 60;
     double smallPole = 1;
@@ -94,8 +94,8 @@ public class ControlPart extends OpMode {
         }
 
         if(gamepad2.b){
-            if(distance != bigPole) {
-                double dis = bigPole - distance;
+            if(heightSlider != bigPole) {
+                double dis = bigPole - heightSlider;
                 dis = dis / 2.54;
 
                 int diss = (int) ((dis / SLIDER_WHEEL) * GO_TICKS_PER_REV);
@@ -106,7 +106,7 @@ public class ControlPart extends OpMode {
                 slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 slider.setTargetPosition(diss);
                 slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                distance = bigPole;
+                heightSlider = bigPole;
                 slider.setPower(0.1);
 
             }
@@ -114,8 +114,8 @@ public class ControlPart extends OpMode {
         telemetry.addData("contor",contor);
         //telemetry.update();
         if(gamepad2.a){
-            if(distance != mediumPole) {
-                double dis = mediumPole - distance;
+            if(heightSlider != mediumPole) {
+                double dis = mediumPole - heightSlider;
                 dis = dis / 2.54;
 
                 int diss = (int) ((dis / SLIDER_WHEEL) * GO_TICKS_PER_REV);
@@ -126,13 +126,13 @@ public class ControlPart extends OpMode {
                 slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 slider.setTargetPosition(diss);
                 slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                distance = mediumPole;
+                heightSlider = mediumPole;
                 slider.setPower(0.1);
 
             }
 
         }
-        telemetry.addData("distance",distance);
+        telemetry.addData("distance",heightSlider);
         telemetry.update();
 
 
@@ -191,14 +191,14 @@ public class ControlPart extends OpMode {
 
 
     public void sliderMove(double poleHeight){
-        if(distance != poleHeight) {
-            int diss = calculateDistance(poleHeight - distance,SLIDER_WHEEL,GO_TICKS_PER_REV);
+        if(heightSlider != poleHeight) {
+            int diss = calculateDistance(poleHeight - heightSlider,SLIDER_WHEEL,GO_TICKS_PER_REV);
             telemetry.addData("dis", diss);
             telemetry.update();
             slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slider.setTargetPosition(diss);
             slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            distance = poleHeight;
+            heightSlider = poleHeight;
             slider.setPower(0.1);
 
         }
