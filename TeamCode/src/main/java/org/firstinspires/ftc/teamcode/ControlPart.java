@@ -10,10 +10,23 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name="ControlPart")
 public class ControlPart extends OpMode {
 
+
+    double contor = 0;
+    private static final double GO_TICKS_PER_REV = 537.7d;
+    private static final double PI = 3.14159265d;
+    private static final double  WHEEL_CIRCUMFERENCE =  PI * 3.7795d;
+    private static final double CONST_LATERAL_MOVEMENT = 1.136363636363d;
+    private static final double SLIDER_WHEEL =PI * 0.440944882d;
+    private static final double ROTATORY_BASE = PI *5.90551181d;
     DcMotor frontLeft,frontRight, backLeft, backRight;
     DcMotor rotatoryBase,slider;
     Servo c1,c2;
     double drivePower;
+    double distance = 0;
+    double bigPole = 70;
+    double mediumPole = 60;
+    double smallPole = 1;
+    static int disss;
 
     @Override
     public void init() {
@@ -34,6 +47,8 @@ public class ControlPart extends OpMode {
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
         rotatoryBase.setDirection(DcMotorSimple.Direction.FORWARD);
         slider.setDirection(DcMotorSimple.Direction.FORWARD);
+        //slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -61,10 +76,13 @@ public class ControlPart extends OpMode {
             rotatoryBase.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             rotatoryBase.setPower( -0.6*gamepad2.left_stick_x);
         }
+        /*
         if(gamepad2.right_stick_y!=0){
-            slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            //slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             slider.setPower(0.6*gamepad2.right_stick_y);
         }
+
+         */
 
         if(gamepad2.x){
             c1.setPosition(0);
@@ -74,6 +92,50 @@ public class ControlPart extends OpMode {
             c1.setPosition(0.4);
             c2.setPosition(0);
         }
+
+        if(gamepad2.b){
+            if(distance != bigPole) {
+                double dis = bigPole - distance;
+                dis = dis / 2.54;
+
+                int diss = (int) ((dis / SLIDER_WHEEL) * GO_TICKS_PER_REV);
+                diss /=4;
+                diss *=0.9090909d;
+                telemetry.addData("dis", diss);
+                telemetry.update();
+                slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                slider.setTargetPosition(diss);
+                slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                distance = bigPole;
+                slider.setPower(0.1);
+
+            }
+        }
+        telemetry.addData("contor",contor);
+        //telemetry.update();
+        if(gamepad2.a){
+            if(distance != mediumPole) {
+                double dis = mediumPole - distance;
+                dis = dis / 2.54;
+
+                int diss = (int) ((dis / SLIDER_WHEEL) * GO_TICKS_PER_REV);
+                diss /=4;
+                diss *=0.9090909d;
+                telemetry.addData("dis", diss);
+                telemetry.update();
+                slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                slider.setTargetPosition(diss);
+                slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                distance = mediumPole;
+                slider.setPower(0.1);
+
+            }
+
+        }
+        telemetry.addData("distance",distance);
+        telemetry.update();
+
+
 
         if(gamepad2.left_trigger !=0){
             frontRight.setPower(gamepad2.left_trigger);
@@ -88,7 +150,8 @@ public class ControlPart extends OpMode {
 
 
 
-        debug(gamepad1);
+
+        //debug(gamepad1);
         stop();
 
 
@@ -113,8 +176,31 @@ public class ControlPart extends OpMode {
         frontRight.setPower(0);
         backRight.setPower(0);
         backLeft.setPower(0);
-        //rotatoryBase.setPower(0);
-        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rotatoryBase.setPower(0);
+        //slider.setPower(0);
+
         rotatoryBase.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+    public int calculateDistance(double dis, double wheelCircumference, double ticks){
+        dis = dis / 2.54;
+        int diss = (int) ((dis / SLIDER_WHEEL) * GO_TICKS_PER_REV);
+        diss /=4;
+        diss *=0.9090909d;
+        return diss;
+    }
+
+
+    public void sliderMove(double poleHeight){
+        if(distance != poleHeight) {
+            int diss = calculateDistance(poleHeight - distance,SLIDER_WHEEL,GO_TICKS_PER_REV);
+            telemetry.addData("dis", diss);
+            telemetry.update();
+            slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slider.setTargetPosition(diss);
+            slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            distance = poleHeight;
+            slider.setPower(0.1);
+
+        }
     }
 }

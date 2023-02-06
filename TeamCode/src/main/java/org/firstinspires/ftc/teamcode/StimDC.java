@@ -3,10 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import static android.os.SystemClock.sleep;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
-
-
 import com.qualcomm.robotcore.hardware.Servo;
-//import org.firstinspires.ftc.teamcode.Stim;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 //Class to handle robot movements to reuse in other files
@@ -44,8 +41,10 @@ public class StimDC {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-        slider.setDirection(DcMotor.Direction.FORWARD);
+        slider.setDirection(DcMotor.Direction.REVERSE);
         rotatoryBase.setDirection(DcMotor.Direction.REVERSE);
+
+        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //arm.setDirection(DcMotor.Direction.FORWARD);
 
         this.frontLeft = frontLeft;
@@ -110,7 +109,7 @@ public class StimDC {
     public void resetEncodersRotatoryBase(){
         this.rotatoryBase.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-    public void reset_encoders(){
+    public void resetEncoders(){
         resetEncodersWheelMotors();
         resetEncodersSlider();
         resetEncodersRotatoryBase();
@@ -149,7 +148,7 @@ public class StimDC {
 
     }
 
-    //rotates the rotatory base for the slider
+
 
     public void rotateDiagonal(double distance, double power , String dir){
         if(dir.equals("right")){
@@ -192,6 +191,7 @@ public class StimDC {
         this.frontLeft.setPower(power);
         this.frontRight.setPower(power);
     }
+    //rotates the rotatory base for the slider
     public void rotateRotatoryBase(double degrees,double power,String dir){
         double dis_for_right_angle = 11.4;
 
@@ -317,13 +317,13 @@ public class StimDC {
     public void stopRotatoryBase(){
         this.rotatoryBase.setPower(0);
     }
-    public void stop_slider(){
+    public void stopSlider(){
         this.slider.setPower(0);
 
     }
     public void stop () {
         stopWheelMotors();
-        stop_slider();
+        stopSlider();
         this.rotatoryBase.setPower(0);
         this.arm.setPower(0);
     }
@@ -382,6 +382,9 @@ public class StimDC {
             
         }
      }
+
+
+
 
 }
 
