@@ -97,86 +97,10 @@ public class TestareEncodere extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             robot.runUsingEncoders();
-            /*
-            robot.reset_encoders();
-            robot.forward(70,0.3);
-            robot.waitMotors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.forward(-70,0.3);
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.lateral(50,0.3,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.lateral(100,0.3,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.lateral(50,0.3,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.rotate(180,0.3,"left");
-            robot.wait_motors();
-            robot.stop();
-            
-            robot.reset_encoders();
-            robot.rotate(180,0.3,"right");
-            robot.wait_motors();
-            robot.stop();
-            
-            /*
-            robot.reset_encoders();
-            robot.sliderup(3, 0.1);
-            robot.wait_motors();
-            robot.stop();
-            
-            
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            robot.slider_base_rotate(180,0.3,"right");
-            robot.wait_motors();
-            robot.stop();
-            sleep(100);
-            robot.reset_encoders();
-            robot.slider_base_rotate(180,0.3,"left");
-            robot.wait_motors();
-            robot.stop();
 
-            robot.reset_encoders();
-            robot.sliderup(10,0.1);
-            robot.wait_motors();
-            robot.stop();
-            
-            sleep(1000);
-            robot.reset_encoders();
-            robot.sliderdown(2,0.1);
-            robot.wait_motors();
-            robot.stop();
-        
-
-            robot.run_using_encoders();
-            robot.reset_encoders();
-            telemetry.addLine("test1");
-            telemetry.update();
-            robot.rotate_rotatory_base(180,0.3,"left");
-            telemetry.addLine("test2");
-            telemetry.update();
-
-            telemetry.addLine("test3");
-            telemetry.update();
-            robot.stop_slider();
-            */
-
-            robot.rotateDiagonal(50,0.5,"right");
+            robot.forward(100,0.6);
+            robot.waitWheelMotors();
+            robot.stopWheelMotors();
             sleep(30000); //after execution, the program will wait until the times end so it doesnt loop
         }
 

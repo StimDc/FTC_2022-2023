@@ -23,7 +23,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -33,12 +32,11 @@ import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.ArrayList;
 
-@Autonomous(name="Testare camera", group="Linear Opmode")
-public class TestareCamera extends LinearOpMode
+@Autonomous(name="tentativa lui rares", group="Linear Opmode")
+public class TentativaLuiRares extends LinearOpMode
 {
     private DcMotor front_left=null;
     private DcMotor front_right=null;
@@ -96,7 +94,7 @@ public class TestareCamera extends LinearOpMode
 
         rotatory_base.setDirection(DcMotor.Direction.REVERSE);
 
-        StimDC robot = new StimDC(front_left,front_right,back_left,back_right,rotatory_base,slider,c1,c2);
+        autonomie robot = new autonomie(front_left,front_right,back_left,back_right,rotatory_base,slider,c1,c2);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -206,16 +204,11 @@ public class TestareCamera extends LinearOpMode
         /* Actually do something useful */
         if(tagOfInterest == null)
         {
-            /*
-             * Insert your autonomous code here, presumably running some default configuration
-             * since the tag was never sighted during INIT
-             */
+            autonomie(robot);
         }
         else
         {
-            /*
-             * Insert your autonomous code here, probably using the tag pose to decide your configuration.
-             */
+            autonomie(robot);
 
 
 
@@ -225,7 +218,107 @@ public class TestareCamera extends LinearOpMode
         /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
         while (opModeIsActive()) {sleep(20);}
     }
+    public void autonomie(autonomie robot){
+        robot.runUsingEncoders();
+        robot.setAllPower(0.6,0.6,0.5);
+        robot.resetEncoders();
 
+        robot.initSlider();
+
+        robot.firstConeBigPole("right");
+
+
+
+        robot.resetEncodersSlider();
+        robot.runUsingEncodersSlider();
+        robot.stopSlider();
+
+        robot.resetEncodersWheelMotors();
+        robot.lateral(70,robot.getWheelPower(),"right");
+        robot.waitWheelMotors();
+        robot.stopWheelMotors();
+
+        robot.resetEncodersWheelMotors();
+        robot.forward(-10,robot.getWheelPower());
+        robot.waitWheelMotors();
+        robot.stopWheelMotors();
+
+        robot.resetEncodersWheelMotors();
+        robot.lateral(16,robot.getWheelPower(),"right");
+        robot.waitWheelMotors();
+        robot.stopWheelMotors();
+
+        robot.releaseCone();
+
+        robot.resetEncodersSlider();
+        robot.sliderUp(15,robot.getSliderPower());
+        robot.waitSlider();
+
+        robot.resetEncodersRotatoryBase();
+        robot.rotateRotatoryBase(110,robot.getWheelPower(),"right");
+        robot.waitRotatoryBase();
+        robot.stopRotatoryBase();
+
+        robot.grabCone();
+        sleep(400);
+
+        robot.resetEncodersSlider();
+        robot.sliderUp(15,robot.getSliderPower());
+        robot.waitSlider();
+
+        robot.resetEncodersRotatoryBase();
+        robot.rotateRotatoryBase(110,robot.getWheelPower(),"left");
+        robot.waitRotatoryBase();
+        robot.stopRotatoryBase();
+
+
+
+
+        robot.resetEncodersWheelMotors();
+        robot.lateral(16,robot.getWheelPower(),"left");
+        robot.waitWheelMotors();
+        robot.stopWheelMotors();
+
+        robot.resetEncodersWheelMotors();
+        robot.forward(11,robot.getWheelPower());
+        robot.waitWheelMotors();
+        robot.stopWheelMotors();
+
+        robot.resetEncodersWheelMotors();
+        robot.lateral(50,robot.getWheelPower(),"left");
+        robot.waitWheelMotors();
+        robot.stopWheelMotors();
+
+        robot.resetEncodersSlider();
+        robot.sliderUp(60,robot.getSliderPower());
+        robot.waitSlider();
+
+        robot.resetEncodersWheelMotors();
+        robot.lateral(20,robot.getWheelPower(),"left");
+        robot.waitWheelMotors();
+        robot.stopWheelMotors();
+
+
+        robot.resetEncodersRotatoryBase();
+        robot.rotateRotatoryBase(51,robot.getRotBasePower(),"left");
+        robot.waitRotatoryBase();
+        robot.stopRotatoryBase();
+
+        sleep(500);
+        robot.releaseCone();
+
+        robot.resetEncodersRotatoryBase();
+        robot.rotateRotatoryBase(51,robot.getRotBasePower(),"right");
+        robot.waitRotatoryBase();
+        robot.stopRotatoryBase();
+
+
+
+
+
+
+
+    }
     void tagToTelemetry(AprilTagDetection detection)
     {
         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
