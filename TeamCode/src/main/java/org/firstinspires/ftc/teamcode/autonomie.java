@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-
-
 import static android.os.SystemClock.sleep;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -29,7 +27,7 @@ public class autonomie extends StimDC{
     }
     public void firstConeBigPole(String dir){
         String dir2;
-        if(dir == "right"){
+        if(dir.equals("right")){
             dir2 = "left";
         }
         else{
@@ -37,21 +35,23 @@ public class autonomie extends StimDC{
         }
         this.resetEncodersWheelMotors();
         this.forward(123,this.getWheelPower());
-        this.getWheelPower();
         this.waitWheelMotors();
         this.stopWheelMotors();
-        /*sleep(200);
+        /*
+        sleep(200);
         this.resetEncodersWheelMotors();
         this.forward(-27,this.getWheelPower());
         this.waitWheelMotors();
-        this.stopWheelMotors();*/
+        this.stopWheelMotors();
+
+         */
 
         this.sliderUp(75,this.getWheelPower());
         this.waitSlider();
 
         this.resetEncodersWheelMotors();
-        if(dir == "right"){
-            this.lateral(16,this.getWheelPower(),dir2);
+        if(dir.equals("right")){
+            this.lateral(18,this.getWheelPower(),dir2);
         }
         else{
             this.lateral(17,this.getWheelPower(),dir2);
@@ -61,8 +61,8 @@ public class autonomie extends StimDC{
         this.stopWheelMotors();
 
         this.resetEncodersRotatoryBase();
-        if(dir == "right") {
-            this.rotateRotatoryBase(62, this.getRotBasePower(), dir2);
+        if(dir.equals("right")) {
+            this.rotateRotatoryBase(65, this.getRotBasePower(), dir2);
         }
         else{
             this.rotateRotatoryBase(55, this.getRotBasePower(), dir2);
@@ -72,10 +72,15 @@ public class autonomie extends StimDC{
         this.stopRotatoryBase();
 
         sleep(500);
+
+        this.resetEncodersSlider();
+        this.sliderDown(2,this.getSliderPower());
+        this.waitSlider();
+
         this.releaseCone();
 
         this.resetEncodersRotatoryBase();
-        if(dir == "right"){
+        if(dir.equals("right")){
             this.rotateRotatoryBase(62,this.getRotBasePower(),dir);
         }
         else{
@@ -85,22 +90,34 @@ public class autonomie extends StimDC{
         this.stopRotatoryBase();
 
 
-        //this.grabCone();
+        this.grabCone();
 
         this.runUsingEncodersSlider();
+
+
         this.stopSlider();
+
+        this.resetEncodersRotatoryBase();
+        if(dir == "right"){
+            this.rotateRotatoryBase(90,this.getRotBasePower(),"right");
+        }
+        else{
+            this.rotateRotatoryBase(90,this.getRotBasePower(),"left");
+        }
+        this.waitRotatoryBase();
+        this.stopRotatoryBase();
 
     }
 
     void parking(String dir,String dir2){
         this.resetEncodersWheelMotors();
-        if(dir2 == "right"){
-            if(dir == "left"){
+        if(dir2.equals("right")){
+            if(dir.equals("left")){
 
                 this.lateral(50,this.getWheelPower(),"left");
 
             }
-            else if(dir == "straight"){
+            else if(dir.equals("straight")){
                 this.lateral(25,this.getWheelPower(),"right");
             }
             else{
@@ -108,12 +125,12 @@ public class autonomie extends StimDC{
             }
         }
         else{
-            if(dir == "left"){
+            if(dir.equals("left")){
 
                 this.lateral(70,this.getWheelPower(),"left");
 
             }
-            else if(dir == "straight"){
+            else if(dir.equals("straight")){
                 this.lateral(25,this.getWheelPower(),"left");
             }
             else{

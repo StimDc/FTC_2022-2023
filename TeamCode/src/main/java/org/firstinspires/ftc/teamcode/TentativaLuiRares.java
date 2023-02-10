@@ -229,88 +229,23 @@ public class TentativaLuiRares extends LinearOpMode
 
 
 
-        robot.resetEncodersSlider();
-        robot.runUsingEncodersSlider();
-        robot.stopSlider();
-
         robot.resetEncodersWheelMotors();
-        robot.lateral(70,robot.getWheelPower(),"right");
+        robot.lateral(82,robot.getWheelPower(),"right");
+        robot.rotateRotatoryBase(120,robot.getRotBasePower(),"right");
         robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
-        robot.resetEncodersWheelMotors();
-        robot.forward(-10,robot.getWheelPower());
-        robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
-        robot.resetEncodersWheelMotors();
-        robot.lateral(16,robot.getWheelPower(),"right");
-        robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
-        robot.releaseCone();
-
-        robot.resetEncodersSlider();
-        robot.sliderUp(15,robot.getSliderPower());
-        robot.waitSlider();
-
-        robot.resetEncodersRotatoryBase();
-        robot.rotateRotatoryBase(110,robot.getWheelPower(),"right");
-        robot.waitRotatoryBase();
-        robot.stopRotatoryBase();
-
         robot.grabCone();
-        sleep(400);
-
+        sleep(300);
         robot.resetEncodersSlider();
-        robot.sliderUp(15,robot.getSliderPower());
+        robot.sliderUp(16,robot.getSliderPower());
         robot.waitSlider();
 
-        robot.resetEncodersRotatoryBase();
-        robot.rotateRotatoryBase(110,robot.getWheelPower(),"left");
-        robot.waitRotatoryBase();
-        robot.stopRotatoryBase();
-
-
-
-
-        robot.resetEncodersWheelMotors();
-        robot.lateral(16,robot.getWheelPower(),"left");
-        robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
-        robot.resetEncodersWheelMotors();
-        robot.forward(11,robot.getWheelPower());
-        robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
-        robot.resetEncodersWheelMotors();
-        robot.lateral(50,robot.getWheelPower(),"left");
-        robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
-        robot.resetEncodersSlider();
-        robot.sliderUp(60,robot.getSliderPower());
-        robot.waitSlider();
-
-        robot.resetEncodersWheelMotors();
-        robot.lateral(20,robot.getWheelPower(),"left");
-        robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
 
         robot.resetEncodersRotatoryBase();
-        robot.rotateRotatoryBase(51,robot.getRotBasePower(),"left");
-        robot.waitRotatoryBase();
-        robot.stopRotatoryBase();
+        robot.rotateRotatoryBase(120,robot.getRotBasePower(),"left");
 
-        sleep(500);
-        robot.releaseCone();
-
-        robot.resetEncodersRotatoryBase();
-        robot.rotateRotatoryBase(51,robot.getRotBasePower(),"right");
-        robot.waitRotatoryBase();
-        robot.stopRotatoryBase();
+        robot.resetEncodersWheelMotors();
+        robot.lateral(82,robot.getWheelPower(),"left");
+        robot.waitWheelMotors();
 
 
 

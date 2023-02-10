@@ -229,6 +229,8 @@ public class DreaptaMare extends LinearOpMode
 
         robot.parking(direction,"right");
 
+
+
         /*
         robot.resetEncodersSlider();
         robot.runUsingEncodersSlider();

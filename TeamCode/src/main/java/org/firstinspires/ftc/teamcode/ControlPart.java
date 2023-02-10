@@ -80,8 +80,9 @@ public class ControlPart extends OpMode {
         }
 
         if(gamepad2.right_stick_x !=0){
-            //rotatoryBase.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
             rotatoryBase.setPower( -0.5*gamepad2.right_stick_x);
+
         }
 
 
@@ -91,33 +92,41 @@ public class ControlPart extends OpMode {
 
             c1.setPosition(0);
             c2.setPosition(0.4);
+
         }
         if(gamepad2.y){
             c1.setPosition(0.4);
             c2.setPosition(0);
+
         }
 
         if(gamepad2.dpad_up){
             sliderMove(bigPole);
+
         }
         if(gamepad2.dpad_left){
             sliderMove(mediumPole);
+
         }
         if(gamepad2.dpad_down){
             sliderMove(smallPole);
+
         }
         if(gamepad2.dpad_right){
             sliderMove(8);
+
         }
 
 
         if(gamepad2.left_trigger !=0){
             frontRight.setPower(gamepad2.left_trigger);
             backRight.setPower(gamepad2.left_trigger);
+
         }
         if(gamepad2.right_trigger !=0){
             frontLeft.setPower(gamepad2.right_trigger);
             frontRight.setPower(-gamepad2.right_trigger);
+
         }
 
 
@@ -195,7 +204,7 @@ public class ControlPart extends OpMode {
             slider.setPower(0);
             heightSlider = 0;
         }
-        sleep(1000);
+        sleep(100);
     }
 
     public void setSlider(DcMotorSimple.Direction direction, double poleHeight, int sign){
