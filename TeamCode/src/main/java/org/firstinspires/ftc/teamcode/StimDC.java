@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import static android.os.SystemClock.sleep;
 
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 //Class to handle robot movements to reuse in other files
-
+@Config
 public class StimDC {
     private static final double GO_TICKS_PER_REV = 537.7d;
     private static final double PI = 3.14159265d;
@@ -30,7 +31,7 @@ public class StimDC {
     public double camera_cx = 402.145;
     public double camera_cy = 221.506;
 
-    private double wheelPower = 0.5;
+    public static double wheelPower = 0.5;
     private double sliderPower = 0.5;
     private double rotBasePower = 0.5;
 

@@ -50,22 +50,18 @@ public class autonomie extends StimDC{
         this.waitSlider();
 
         this.resetEncodersWheelMotors();
-        if(dir.equals("right")){
-            this.lateral(18,this.getWheelPower(),dir2);
-        }
-        else{
-            this.lateral(17,this.getWheelPower(),dir2);
-        }
+        this.lateral(14,this.getWheelPower(),dir2);
+
 
         this.waitWheelMotors();
         this.stopWheelMotors();
 
         this.resetEncodersRotatoryBase();
         if(dir.equals("right")) {
-            this.rotateRotatoryBase(65, this.getRotBasePower(), dir2);
+            this.rotateRotatoryBase(57, this.getRotBasePower(), dir2);
         }
         else{
-            this.rotateRotatoryBase(55, this.getRotBasePower(), dir2);
+            this.rotateRotatoryBase(52, this.getRotBasePower(), dir2);
 
         }
         this.waitRotatoryBase();
@@ -74,38 +70,32 @@ public class autonomie extends StimDC{
         sleep(500);
 
         this.resetEncodersSlider();
-        this.sliderDown(2,this.getSliderPower());
+        this.sliderDown(5,this.getSliderPower());
         this.waitSlider();
-
+        if(dir.equals("right")){
+            sleep(500);
+        }
         this.releaseCone();
 
         this.resetEncodersRotatoryBase();
         if(dir.equals("right")){
-            this.rotateRotatoryBase(62,this.getRotBasePower(),dir);
+            this.rotateRotatoryBase(65,this.getRotBasePower(),dir);
         }
         else{
-            this.rotateRotatoryBase(55,this.getRotBasePower(),dir);
+            this.rotateRotatoryBase(52,this.getRotBasePower(),dir);
         }
         this.waitRotatoryBase();
         this.stopRotatoryBase();
 
 
-        this.grabCone();
+        //this.grabCone();
 
         this.runUsingEncodersSlider();
 
 
         this.stopSlider();
 
-        this.resetEncodersRotatoryBase();
-        if(dir == "right"){
-            this.rotateRotatoryBase(90,this.getRotBasePower(),"right");
-        }
-        else{
-            this.rotateRotatoryBase(90,this.getRotBasePower(),"left");
-        }
-        this.waitRotatoryBase();
-        this.stopRotatoryBase();
+
 
     }
 
@@ -118,8 +108,8 @@ public class autonomie extends StimDC{
 
             }
             else if(dir.equals("straight")){
-                this.lateral(25,this.getWheelPower(),"right");
-            }
+                this.lateral(20,this.getWheelPower(),"right");
+             }
             else{
                 this.lateral(70,this.getWheelPower(),"right");
             }
@@ -131,7 +121,7 @@ public class autonomie extends StimDC{
 
             }
             else if(dir.equals("straight")){
-                this.lateral(25,this.getWheelPower(),"left");
+                this.lateral(20,this.getWheelPower(),"left");
             }
             else{
                 this.lateral(50,this.getWheelPower(),"right");

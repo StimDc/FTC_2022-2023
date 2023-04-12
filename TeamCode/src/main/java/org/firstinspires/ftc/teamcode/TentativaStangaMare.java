@@ -35,8 +35,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name="tentativa lui rares", group="Linear Opmode")
-public class TentativaLuiRares extends LinearOpMode
+@Autonomous(name="Tentativa Stanga Mare", group="Linear Opmode")
+public class TentativaStangaMare extends LinearOpMode
 {
     private DcMotor front_left=null;
     private DcMotor front_right=null;
@@ -225,14 +225,12 @@ public class TentativaLuiRares extends LinearOpMode
 
         robot.initSlider();
 
-        robot.firstConeBigPole("right");
-
-
+        robot.firstConeBigPole("left");
 
 
 
         robot.resetEncodersWheelMotors();
-        robot.rotate(90,robot.getWheelPower(),"right");
+        robot.rotate(90,robot.getWheelPower(),"left");
         robot.waitWheelMotors();
         robot.stopWheelMotors();
 
@@ -242,7 +240,7 @@ public class TentativaLuiRares extends LinearOpMode
         robot.stopWheelMotors();
 
         robot.resetEncodersSlider();
-        robot.sliderUp(14,robot.getSliderPower());
+        robot.sliderUp(16,robot.getSliderPower());
         robot.waitSlider();
 
         robot.grabCone();
@@ -253,21 +251,21 @@ public class TentativaLuiRares extends LinearOpMode
         robot.waitSlider();
 
         robot.resetEncodersWheelMotors();
-        robot.forward(-62,robot.getWheelPower());
+        robot.forward(-61,robot.getWheelPower());
         robot.waitWheelMotors();
         robot.stopWheelMotors();
 
         robot.resetEncodersWheelMotors();
-        robot.rotate(90,robot.getWheelPower(),"left");
+        robot.rotate(90,robot.getWheelPower(),"right");
         robot.waitWheelMotors();
         robot.stopWheelMotors();
 
         robot.resetEncodersSlider();
-        robot.sliderUp(58,robot.getSliderPower());
+        robot.sliderUp(56,robot.getSliderPower());
         robot.waitSlider();
 
         robot.resetEncodersRotatoryBase();
-        robot.rotateRotatoryBase(60,robot.getRotBasePower(),"left");
+        robot.rotateRotatoryBase(40,robot.getRotBasePower(),"right");
         robot.waitRotatoryBase();
         robot.stopRotatoryBase();
 
@@ -279,15 +277,17 @@ public class TentativaLuiRares extends LinearOpMode
         sleep(1000);
 
         robot.resetEncodersRotatoryBase();
-        robot.rotateRotatoryBase(122,robot.getRotBasePower(),"right");
+        robot.rotateRotatoryBase(152,robot.getRotBasePower(),"left");
         robot.waitRotatoryBase();
         robot.stopRotatoryBase();
 
         robot.stopSlider();
 
-        robot.grabCone();
+        robot.parking(direction,"left");
 
-        robot.parking(direction,"right");
+
+
+
 
 
 

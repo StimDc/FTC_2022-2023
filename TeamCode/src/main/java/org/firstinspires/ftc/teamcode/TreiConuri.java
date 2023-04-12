@@ -35,8 +35,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name="tentativa lui rares", group="Linear Opmode")
-public class TentativaLuiRares extends LinearOpMode
+@Autonomous(name="Trei Dreapta", group="Linear Opmode")
+public class TreiConuri extends LinearOpMode
 {
     private DcMotor front_left=null;
     private DcMotor front_right=null;
@@ -219,75 +219,81 @@ public class TentativaLuiRares extends LinearOpMode
         while (opModeIsActive()) {sleep(20);}
     }
     public void autonomie(autonomie robot){
+        double cnt,cntb;
         robot.runUsingEncoders();
         robot.setAllPower(0.6,0.6,0.5);
         robot.resetEncoders();
 
         robot.initSlider();
 
-        robot.firstConeBigPole("right");
-
-
-
-
-
         robot.resetEncodersWheelMotors();
-        robot.rotate(90,robot.getWheelPower(),"right");
+        robot.forward(123,robot.getWheelPower());
         robot.waitWheelMotors();
         robot.stopWheelMotors();
-
-        robot.resetEncodersWheelMotors();
-        robot.forward(62,robot.getWheelPower());
-        robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
-        robot.resetEncodersSlider();
-        robot.sliderUp(14,robot.getSliderPower());
-        robot.waitSlider();
-
-        robot.grabCone();
-        sleep(1000);
-
-        robot.resetEncodersSlider();
-        robot.sliderUp(15,robot.getSliderPower());
-        robot.waitSlider();
-
-        robot.resetEncodersWheelMotors();
-        robot.forward(-62,robot.getWheelPower());
-        robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
-        robot.resetEncodersWheelMotors();
-        robot.rotate(90,robot.getWheelPower(),"left");
-        robot.waitWheelMotors();
-        robot.stopWheelMotors();
-
-        robot.resetEncodersSlider();
-        robot.sliderUp(58,robot.getSliderPower());
-        robot.waitSlider();
-
-        robot.resetEncodersRotatoryBase();
-        robot.rotateRotatoryBase(60,robot.getRotBasePower(),"left");
-        robot.waitRotatoryBase();
-        robot.stopRotatoryBase();
-
-        robot.resetEncodersSlider();
-        robot.sliderDown(10,robot.getSliderPower());
-        robot.waitSlider();
 
         robot.releaseCone();
-        sleep(1000);
-
-        robot.resetEncodersRotatoryBase();
-        robot.rotateRotatoryBase(122,robot.getRotBasePower(),"right");
-        robot.waitRotatoryBase();
-        robot.stopRotatoryBase();
-
         robot.stopSlider();
+        for (int i=1;i<=2;i++) {
+            robot.resetEncodersWheelMotors();
+            robot.rotate(90, robot.getWheelPower(), "right");
+            robot.waitWheelMotors();
+            robot.stopWheelMotors();
 
-        robot.grabCone();
+            robot.resetEncodersWheelMotors();
+            robot.forward(62, robot.getWheelPower());
+            robot.waitWheelMotors();
+            robot.stopWheelMotors();
+
+            robot.resetEncodersSlider();
+            robot.sliderUp ( 16-(i-1)*3, robot.getSliderPower());
+            robot.waitSlider();
+
+            robot.grabCone();
+            sleep(1000);
+
+            robot.resetEncodersSlider();
+            robot.sliderUp(15, robot.getSliderPower());
+            robot.waitSlider();
+
+            robot.resetEncodersWheelMotors();
+            robot.forward(-61, robot.getWheelPower());
+            robot.waitWheelMotors();
+            robot.stopWheelMotors();
+
+            robot.resetEncodersWheelMotors();
+            robot.rotate(90, robot.getWheelPower(), "left");
+            robot.waitWheelMotors();
+            robot.stopWheelMotors();
+
+            robot.resetEncodersSlider();
+            robot.sliderUp(56+(i-1)*3, robot.getSliderPower());
+            robot.waitSlider();
+
+            robot.resetEncodersRotatoryBase();
+            robot.rotateRotatoryBase(40, robot.getRotBasePower(), "left");
+            robot.waitRotatoryBase();
+            robot.stopRotatoryBase();
+
+            robot.resetEncodersSlider();
+            robot.sliderDown(10, robot.getSliderPower());
+            robot.waitSlider();
+
+            robot.releaseCone();
+            sleep(1000);
+
+            robot.resetEncodersRotatoryBase();
+            robot.rotateRotatoryBase(152, robot.getRotBasePower(), "right");
+            robot.waitRotatoryBase();
+            robot.stopRotatoryBase();
+
+            robot.stopSlider();
+        }
 
         robot.parking(direction,"right");
+
+
+
+
 
 
 
